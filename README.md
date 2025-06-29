@@ -1,0 +1,2 @@
+# refrigerator_management
+冷蔵庫内の食材を管理するアプリ
