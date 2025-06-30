@@ -69,7 +69,11 @@ struct ShoppingListView: View {
                     id: item.id,
                     name: item.name,
                     quantity: item.quantity,
-                    expirationDate: item.expirationDate,
+                    // Use the item's expiration date if available, otherwise
+                    // provide a temporary value so the editor has something to
+                    // display. The value can be adjusted by the user before
+                    // saving.
+                    expirationDate: item.expirationDate ?? Date(),
                     storageType: selectedStorageType
                 )
                 FoodRegisterView(itemToEdit: foodItem) { updatedItem in
