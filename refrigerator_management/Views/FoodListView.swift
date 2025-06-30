@@ -6,6 +6,7 @@ struct FoodListView: View {
     @State private var selectedStorage: StorageType = .fridge
     @State private var showingRegister = false
     @State private var editingItem: FoodItem? = nil
+    @State private var showingOCR = false
     @StateObject var viewModel: FoodViewModel
 
     var filteredItems: [FoodItem] {
@@ -64,8 +65,10 @@ struct FoodListView: View {
             }
             .navigationTitle("食材一覧")
             .toolbar {
-                // 買い物リスト画面へ遷移
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItemGroup(placement: .navigationBarTrailing) {
+                    Button(action: { showingOCR = true }) {
+                        Image(systemName: "text.viewfinder")
+                    }
                     NavigationLink(
                         destination: ShoppingListView(
                             shoppingViewModel: ShoppingViewModel(),
@@ -79,6 +82,11 @@ struct FoodListView: View {
             .sheet(isPresented: $showingRegister) {
                 FoodRegisterView { newItem in
                     viewModel.add(item: newItem)
+                }
+            }
+            .sheet(isPresented: $showingOCR) {
+                ReceiptOCRView { items in
+                    viewModel.foodItems.append(contentsOf: items)
                 }
             }
             .sheet(item: $editingItem) { item in
