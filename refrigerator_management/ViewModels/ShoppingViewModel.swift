@@ -68,6 +68,7 @@ class ShoppingViewModel: ObservableObject {
         if let index = shoppingItems.firstIndex(where: { $0.name == foodItem.name }) {
             shoppingItems[index].name = foodItem.name
             shoppingItems[index].quantity = foodItem.quantity
+            shoppingItems[index].expirationDate = foodItem.expirationDate
             save()
         }
     }
