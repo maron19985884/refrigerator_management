@@ -6,7 +6,6 @@ struct FoodListView: View {
     @State private var selectedStorage: StorageType = .fridge
     @State private var showingRegister = false
     @State private var editingItem: FoodItem? = nil
-    @State private var showingOCR = false
     @StateObject var viewModel: FoodViewModel
 
     var filteredItems: [FoodItem] {
@@ -66,9 +65,6 @@ struct FoodListView: View {
             .navigationTitle("食材一覧")
             .toolbar {
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
-                    Button(action: { showingOCR = true }) {
-                        Image(systemName: "text.viewfinder")
-                    }
                     NavigationLink(
                         destination: ShoppingListView(
                             shoppingViewModel: ShoppingViewModel(),
@@ -82,11 +78,6 @@ struct FoodListView: View {
             .sheet(isPresented: $showingRegister) {
                 FoodRegisterView { newItem in
                     viewModel.add(item: newItem)
-                }
-            }
-            .sheet(isPresented: $showingOCR) {
-                ReceiptOCRView { items in
-                    viewModel.foodItems.append(contentsOf: items)
                 }
             }
             .sheet(item: $editingItem) { item in
@@ -120,8 +111,17 @@ struct FoodListView: View {
     }
 
     func dateLabel(for date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "M/d"
-        return "期限: \(formatter.string(from: date))"
+        let calendar = Calendar.current
+        if date < calendar.startOfDay(for: Date()) {
+            return "期限切れ"
+        } else if calendar.isDateInToday(date) {
+            return "本日まで"
+        } else if calendar.isDateInTomorrow(date) {
+            return "明日まで"
+        } else {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "M/d"
+            return "期限: \(formatter.string(from: date))"
+        }
     }
 }
