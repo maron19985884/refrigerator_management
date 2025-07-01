@@ -15,80 +15,69 @@ struct FoodListView: View {
     }
 
     var body: some View {
-        NavigationView {
-            ZStack {
-                VStack {
-                    Picker("保存場所", selection: $selectedStorage) {
-                        ForEach(StorageType.allCases) { type in
-                            Text(type.rawValue).tag(type)
-                        }
-                    }
-                    .pickerStyle(.segmented)
-                    .padding(.horizontal)
+        ZStack {
+            VStack {
+                Text("食材一覧")
+                    .font(.largeTitle)
+                    .bold()
+                    .padding(.top)
 
-                    List {
-                        ForEach(filteredItems) { item in
-                            Button(action: {
-                                editingItem = item
-                            }) {
-                                HStack {
-                                    Text(item.name)
-                                    Spacer()
-                                    Text("x\(item.quantity)")
-                                    Text(dateLabel(for: item.expirationDate))
-                                        .foregroundColor(color(for: item.expirationDate))
-                                        .font(.caption)
-                                }
+                Picker("保存場所", selection: $selectedStorage) {
+                    ForEach(StorageType.allCases) { type in
+                        Text(type.rawValue).tag(type)
+                    }
+                }
+                .pickerStyle(.segmented)
+                .padding(.horizontal)
+
+                List {
+                    ForEach(filteredItems) { item in
+                        Button(action: {
+                            editingItem = item
+                        }) {
+                            HStack {
+                                Text(item.name)
+                                Spacer()
+                                Text("x\(item.quantity)")
+                                Text(dateLabel(for: item.expirationDate))
+                                    .foregroundColor(color(for: item.expirationDate))
+                                    .font(.caption)
                             }
                         }
-                        .onDelete(perform: deleteItem)
                     }
+                    .onDelete(perform: deleteItem)
                 }
+            }
 
-                // 右下の追加ボタン
-                VStack {
+            // 右下の追加ボタン
+            VStack {
+                Spacer()
+                HStack {
                     Spacer()
-                    HStack {
-                        Spacer()
-                        Button(action: {
-                            showingRegister = true
-                        }) {
-                            Image(systemName: "plus.circle.fill")
-                                .resizable()
-                                .frame(width: 60, height: 60)
-                                .foregroundColor(.blue)
-                                .padding()
-                        }
-                    }
-                }
-            }
-            .navigationTitle("食材一覧")
-            .toolbar {
-                ToolbarItemGroup(placement: .navigationBarTrailing) {
-                    NavigationLink(
-                        destination: ShoppingListView(
-                            shoppingViewModel: ShoppingViewModel(),
-                            foodViewModel: viewModel
-                        )
-                    ) {
-                        Image(systemName: "cart")
-                    }
-                }
-            }
-            .sheet(isPresented: $showingRegister) {
-                FoodRegisterView { newItem in
-                    viewModel.add(item: newItem)
-                }
-            }
-            .sheet(item: $editingItem) { item in
-                FoodRegisterView(itemToEdit: item) { updatedItem in
-                    if let index = viewModel.foodItems.firstIndex(where: { $0.id == updatedItem.id }) {
-                        viewModel.foodItems[index] = updatedItem
+                    Button(action: {
+                        showingRegister = true
+                    }) {
+                        Image(systemName: "plus.circle.fill")
+                            .resizable()
+                            .frame(width: 60, height: 60)
+                            .foregroundColor(.blue)
+                            .padding()
                     }
                 }
             }
         }
-        .navigationViewStyle(.stack)
+        .sheet(isPresented: $showingRegister) {
+            FoodRegisterView { newItem in
+                viewModel.add(item: newItem)
+            }
+        }
+        .sheet(item: $editingItem) { item in
+            FoodRegisterView(itemToEdit: item) { updatedItem in
+                if let index = viewModel.foodItems.firstIndex(where: { $0.id == updatedItem.id }) {
+                    viewModel.foodItems[index] = updatedItem
+                }
+            }
+        }
     }
 
     func deleteItem(at offsets: IndexSet) {

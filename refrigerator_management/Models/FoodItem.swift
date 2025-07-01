@@ -18,6 +18,7 @@ struct FoodItem: Identifiable, Codable {
     var quantity: Int
     var expirationDate: Date
     var storageType: StorageType
+    
 
     init(id: UUID = UUID(), name: String, quantity: Int, expirationDate: Date, storageType: StorageType) {
         self.id = id

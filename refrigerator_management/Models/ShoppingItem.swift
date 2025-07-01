@@ -5,12 +5,13 @@ struct ShoppingItem: Identifiable, Codable, Equatable {
     let id: UUID
     var name: String
     var quantity: Int = 1
-    /// The expected expiration date when the item is converted to a `FoodItem`.
-    ///
-    /// This value is optional because shopping items created manually do not
-    /// always have an expiration date. `ShoppingListView` falls back to a
-    /// default date if this value is `nil` when adding to stock.
+
+    /// 食材を在庫に変換する際の賞味期限
     var expirationDate: Date?
+
+    /// 食材を在庫に変換する際の保存場所
+    var storageType: StorageType = .fridge
+
     var manuallyAdded: Bool
     var linkedFoodItemID: UUID?
     var note: String?
@@ -23,6 +24,7 @@ struct ShoppingItem: Identifiable, Codable, Equatable {
         name: String,
         quantity: Int = 1,
         expirationDate: Date? = nil,
+        storageType: StorageType = .fridge, // ✅ 追加
         manuallyAdded: Bool = true,
         linkedFoodItemID: UUID? = nil,
         note: String? = nil,
@@ -33,6 +35,7 @@ struct ShoppingItem: Identifiable, Codable, Equatable {
         self.name = name
         self.quantity = quantity
         self.expirationDate = expirationDate
+        self.storageType = storageType // ✅ 追加
         self.manuallyAdded = manuallyAdded
         self.linkedFoodItemID = linkedFoodItemID
         self.note = note

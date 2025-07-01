@@ -13,15 +13,16 @@ struct ShoppingListView: View {
                 List {
                     ForEach(shoppingViewModel.shoppingItems) { item in
                         HStack {
-                            // チェックマークボタン
                             Button(action: {
                                 shoppingViewModel.toggleCheck(for: item)
                             }) {
                                 Image(systemName: item.isChecked ? "checkmark.circle.fill" : "circle")
+                                    .resizable()
+                                    .frame(width: 28, height: 28)
                                     .foregroundColor(item.isChecked ? .green : .gray)
+                                    .padding(.trailing, 8)
                             }
 
-                            // 食材名（タップで編集画面へ遷移）
                             Text(item.name)
                                 .strikethrough(item.isChecked)
                                 .onTapGesture {
@@ -30,13 +31,15 @@ struct ShoppingListView: View {
 
                             Spacer()
 
-                            // メモがあれば表示
                             if let note = item.note, !note.isEmpty {
                                 Text(note)
                                     .font(.caption)
                                     .foregroundColor(.gray)
                             }
                         }
+                        .padding(.vertical, 8)
+                        .background(item.isChecked ? Color.green.opacity(0.15) : Color.clear)
+                        .cornerRadius(8)
                     }
                     .onDelete(perform: shoppingViewModel.delete)
                 }
@@ -69,19 +72,26 @@ struct ShoppingListView: View {
                     id: item.id,
                     name: item.name,
                     quantity: item.quantity,
-                    // Use the item's expiration date if available, otherwise
-                    // provide a temporary value so the editor has something to
-                    // display. The value can be adjusted by the user before
-                    // saving.
                     expirationDate: item.expirationDate ?? Date(),
-                    storageType: selectedStorageType
+                    storageType: item.storageType // ← ここ修正
                 )
                 FoodRegisterView(itemToEdit: foodItem) { updatedItem in
-                    // 更新後の処理（あくまでShoppingViewModelベースで更新）
-                    shoppingViewModel.updateItem(from: updatedItem)
+                    // ✅ 編集後に ShoppingItem に戻す（storageType含めて）
+                    let updatedShoppingItem = ShoppingItem(
+                        id: updatedItem.id,
+                        name: updatedItem.name,
+                        quantity: updatedItem.quantity,
+                        expirationDate: updatedItem.expirationDate,
+                        storageType: updatedItem.storageType, // ← 追加済みのプロパティ
+                        manuallyAdded: true,
+                        linkedFoodItemID: nil,
+                        note: item.note,
+                        addedAt: item.addedAt,
+                        isChecked: item.isChecked
+                    )
+                    shoppingViewModel.updateItem(updatedShoppingItem)
                 }
             }
-
             .confirmationDialog("保存場所を選択", isPresented: $showingStoragePicker, titleVisibility: .visible) {
                 ForEach(StorageType.allCases, id: \.self) { type in
                     Button(type.rawValue) {
@@ -94,28 +104,30 @@ struct ShoppingListView: View {
         .navigationViewStyle(.stack)
     }
 
-    // 新しい食材を追加（編集画面には遷移しない）
     private func addNewItem() {
         let newItem = ShoppingItem(name: "新しい食材")
         shoppingViewModel.add(newItem)
     }
 
-    // 在庫反映処理
+    // ✅ ShoppingItem の storageType / expirationDate を反映して在庫に変換
     private func processCheckedItems() {
         let checkedItems = shoppingViewModel.extractCheckedItemsAndRemove()
         let groupedItems = Dictionary(grouping: checkedItems, by: { $0.name })
 
         for (name, items) in groupedItems {
             let quantity = items.reduce(0) { $0 + ($1.quantity > 0 ? $1.quantity : 1) }
-            let expirationDate = Calendar.current.date(byAdding: .day, value: 7, to: Date()) ?? Date()
+
+            let expirationDate = items.first?.expirationDate ?? Calendar.current.date(byAdding: .day, value: 7, to: Date())!
+            let storageType = items.first?.storageType ?? .fridge
 
             let newFoodItem = FoodItem(
                 name: name,
                 quantity: quantity,
                 expirationDate: expirationDate,
-                storageType: selectedStorageType
+                storageType: storageType
             )
             foodViewModel.add(item: newFoodItem)
         }
     }
 }
+
