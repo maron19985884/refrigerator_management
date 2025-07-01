@@ -8,9 +8,12 @@ class FoodViewModel: ObservableObject {
         didSet { save() } // データ変更時に自動保存
     }
 
-    private let fileName = "food_items.json"
+    private static let documentsDirectory =
+        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+    private let fileURL: URL
 
-    init() {
+    init(fileName: String = "food_items.json") {
+        self.fileURL = Self.documentsDirectory.appendingPathComponent(fileName)
         load()
     }
 
@@ -24,32 +27,34 @@ class FoodViewModel: ObservableObject {
         foodItems.remove(atOffsets: offsets)
     }
 
-    // 保存処理
-     func save() {
-        let url = getDocumentsDirectory().appendingPathComponent(fileName)
-        do {
-            let data = try JSONEncoder().encode(foodItems)
-            try data.write(to: url)
-        } catch {
-            print("[FoodViewModel] 保存エラー: \(error.localizedDescription)")
+    // 保存処理（バックグラウンドで実行）
+    func save() {
+        let items = foodItems
+        let url = fileURL
+        DispatchQueue.global(qos: .background).async {
+            do {
+                let data = try JSONEncoder().encode(items)
+                try data.write(to: url)
+            } catch {
+                print("[FoodViewModel] 保存エラー: \(error.localizedDescription)")
+            }
         }
     }
 
     // 読み込み処理
     private func load() {
-        let url = getDocumentsDirectory().appendingPathComponent(fileName)
+        let url = fileURL
         guard FileManager.default.fileExists(atPath: url.path) else { return }
-        do {
-            let data = try Data(contentsOf: url)
-            let decoded = try JSONDecoder().decode([FoodItem].self, from: data)
-            foodItems = decoded
-        } catch {
-            print("[FoodViewModel] 読み込みエラー: \(error.localizedDescription)")
+        DispatchQueue.global(qos: .background).async {
+            do {
+                let data = try Data(contentsOf: url)
+                let decoded = try JSONDecoder().decode([FoodItem].self, from: data)
+                DispatchQueue.main.async {
+                    self.foodItems = decoded
+                }
+            } catch {
+                print("[FoodViewModel] 読み込みエラー: \(error.localizedDescription)")
+            }
         }
-    }
-
-    // Documentsディレクトリ取得
-    private func getDocumentsDirectory() -> URL {
-        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
     }
 }

@@ -4,6 +4,7 @@ class ShoppingViewModel: ObservableObject {
     @Published var shoppingItems: [ShoppingItem] = []
 
     private let storageKey = "shoppingItems"
+    private let userDefaults = UserDefaults.standard
 
     init() {
         loadItems()
@@ -48,18 +49,27 @@ class ShoppingViewModel: ObservableObject {
         return checkedItems
     }
 
-    // 保存
-     func save() {
-        if let encoded = try? JSONEncoder().encode(shoppingItems) {
-            UserDefaults.standard.set(encoded, forKey: storageKey)
+    // 保存（バックグラウンドで実行）
+    func save() {
+        let items = shoppingItems
+        let key = storageKey
+        DispatchQueue.global(qos: .background).async {
+            if let encoded = try? JSONEncoder().encode(items) {
+                self.userDefaults.set(encoded, forKey: key)
+            }
         }
     }
 
     // 読み込み
     private func loadItems() {
-        if let data = UserDefaults.standard.data(forKey: storageKey),
-           let decoded = try? JSONDecoder().decode([ShoppingItem].self, from: data) {
-            shoppingItems = decoded
+        let key = storageKey
+        DispatchQueue.global(qos: .background).async {
+            if let data = self.userDefaults.data(forKey: key),
+               let decoded = try? JSONDecoder().decode([ShoppingItem].self, from: data) {
+                DispatchQueue.main.async {
+                    self.shoppingItems = decoded
+                }
+            }
         }
     }
 

@@ -7,6 +7,7 @@ class TemplateViewModel: ObservableObject {
     @Published var templates: [[TemplateItem]] = []
 
     private let storageKey = "savedTemplates"
+    private let userDefaults = UserDefaults.standard
 
     init() {
         loadTemplates()
@@ -27,16 +28,23 @@ class TemplateViewModel: ObservableObject {
 
     // テンプレート読み込み
     func loadTemplates() {
-        if let data = UserDefaults.standard.data(forKey: storageKey),
-           let decoded = try? JSONDecoder().decode([[TemplateItem]].self, from: data) {
-            self.templates = decoded
+        DispatchQueue.global(qos: .background).async {
+            if let data = self.userDefaults.data(forKey: self.storageKey),
+               let decoded = try? JSONDecoder().decode([[TemplateItem]].self, from: data) {
+                DispatchQueue.main.async {
+                    self.templates = decoded
+                }
+            }
         }
     }
 
     // テンプレート保存
     func saveTemplates() {
-        if let encoded = try? JSONEncoder().encode(templates) {
-            UserDefaults.standard.set(encoded, forKey: storageKey)
+        let items = templates
+        DispatchQueue.global(qos: .background).async {
+            if let encoded = try? JSONEncoder().encode(items) {
+                self.userDefaults.set(encoded, forKey: self.storageKey)
+            }
         }
     }
 }

@@ -8,6 +8,12 @@ struct FoodListView: View {
     @State private var editingItem: FoodItem? = nil
     @StateObject var viewModel: FoodViewModel
 
+    private static let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "M/d"
+        return formatter
+    }()
+
     var filteredItems: [FoodItem] {
         viewModel.foodItems
             .filter { $0.storageType == selectedStorage }
@@ -89,10 +95,11 @@ struct FoodListView: View {
     }
 
     func color(for date: Date) -> Color {
-        let today = Calendar.current.startOfDay(for: Date())
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
         if date < today {
             return .red
-        } else if Calendar.current.isDateInTomorrow(date) {
+        } else if calendar.isDateInTomorrow(date) {
             return .orange
         } else {
             return .gray
@@ -108,9 +115,7 @@ struct FoodListView: View {
         } else if calendar.isDateInTomorrow(date) {
             return "明日まで"
         } else {
-            let formatter = DateFormatter()
-            formatter.dateFormat = "M/d"
-            return "期限: \(formatter.string(from: date))"
+            return "期限: \(Self.dateFormatter.string(from: date))"
         }
     }
 }
