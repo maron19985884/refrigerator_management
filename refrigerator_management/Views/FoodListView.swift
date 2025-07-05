@@ -45,6 +45,7 @@ struct FoodListView: View {
                                 Text(item.name)
                                 Spacer()
                                 Text("x\(item.quantity)")
+                                Text(item.category.rawValue)
                                 Text(dateLabel(for: item.expirationDate))
                                     .foregroundColor(color(for: item.expirationDate))
                                     .font(.caption)

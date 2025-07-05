@@ -15,7 +15,8 @@ struct ContentView: View {
 
                 ShoppingListView(
                     shoppingViewModel: shoppingViewModel,
-                    foodViewModel: foodViewModel
+                    foodViewModel: foodViewModel,
+                    templateViewModel: templateViewModel
                 )
                 .tabItem {
                     Label("買い物リスト", systemImage: "cart")

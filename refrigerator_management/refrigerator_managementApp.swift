@@ -12,6 +12,7 @@ struct refrigerator_managementApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environment(\.locale, Locale(identifier: "ja_JP"))
         }
     }
 }

@@ -11,8 +11,8 @@ class ShoppingViewModel: ObservableObject {
     }
 
     // アイテムを追加
-    func addItem(name: String, quantity: Int = 1) {
-        let newItem = ShoppingItem(name: name, quantity: quantity)
+    func addItem(name: String, quantity: Int = 1, category: FoodCategory = .other) {
+        let newItem = ShoppingItem(name: name, quantity: quantity, category: category)
         shoppingItems.append(newItem)
         save()
     }
@@ -79,6 +79,8 @@ class ShoppingViewModel: ObservableObject {
             shoppingItems[index].name = foodItem.name
             shoppingItems[index].quantity = foodItem.quantity
             shoppingItems[index].expirationDate = foodItem.expirationDate
+            shoppingItems[index].storageType = foodItem.storageType
+            shoppingItems[index].category = foodItem.category
             save()
         }
     }
