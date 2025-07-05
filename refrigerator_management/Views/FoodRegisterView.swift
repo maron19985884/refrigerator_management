@@ -8,6 +8,7 @@ struct FoodRegisterView: View {
     @State private var quantity: Int = 1
     @State private var expirationDate: Date = Date()
     @State private var storageType: StorageType = .fridge
+    @State private var category: FoodCategory = .other
 
     let itemToEdit: FoodItem?
     var onSave: (FoodItem) -> Void
@@ -45,6 +46,15 @@ struct FoodRegisterView: View {
                     .pickerStyle(.segmented)
                 }
 
+                Section(header: Text("カテゴリ")) {
+                    Picker("カテゴリ", selection: $category) {
+                        ForEach(FoodCategory.allCases) { cat in
+                            Text(cat.rawValue).tag(cat)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                }
+
                 Section {
                     Button(action: {
                         let item = FoodItem(
@@ -52,7 +62,8 @@ struct FoodRegisterView: View {
                             name: name,
                             quantity: quantity,
                             expirationDate: expirationDate,
-                            storageType: storageType
+                            storageType: storageType,
+                            category: category
                         )
                         onSave(item)
                         presentationMode.wrappedValue.dismiss()
@@ -74,6 +85,7 @@ struct FoodRegisterView: View {
                     quantity = item.quantity
                     expirationDate = item.expirationDate
                     storageType = item.storageType
+                    category = item.category
                 }
             }
         }

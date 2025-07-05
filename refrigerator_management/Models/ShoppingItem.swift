@@ -6,6 +6,9 @@ struct ShoppingItem: Identifiable, Codable, Equatable {
     var name: String
     var quantity: Int = 1
 
+    /// 食材カテゴリ
+    var category: FoodCategory = .other
+
     /// 食材を在庫に変換する際の賞味期限
     var expirationDate: Date?
 
@@ -24,7 +27,8 @@ struct ShoppingItem: Identifiable, Codable, Equatable {
         name: String,
         quantity: Int = 1,
         expirationDate: Date? = nil,
-        storageType: StorageType = .fridge, // ✅ 追加
+        storageType: StorageType = .fridge,
+        category: FoodCategory = .other,
         manuallyAdded: Bool = true,
         linkedFoodItemID: UUID? = nil,
         note: String? = nil,
@@ -35,7 +39,8 @@ struct ShoppingItem: Identifiable, Codable, Equatable {
         self.name = name
         self.quantity = quantity
         self.expirationDate = expirationDate
-        self.storageType = storageType // ✅ 追加
+        self.storageType = storageType
+        self.category = category
         self.manuallyAdded = manuallyAdded
         self.linkedFoodItemID = linkedFoodItemID
         self.note = note

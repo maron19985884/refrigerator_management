@@ -3,6 +3,7 @@ import SwiftUI
 struct ShoppingListView: View {
     @ObservedObject var shoppingViewModel: ShoppingViewModel
     @ObservedObject var foodViewModel: FoodViewModel
+    @ObservedObject var templateViewModel: TemplateViewModel
     @State private var editingItem: ShoppingItem? = nil
     @State private var showingStoragePicker = false
     @State private var selectedStorageType: StorageType = .fridge
@@ -65,6 +66,11 @@ struct ShoppingListView: View {
                         Image(systemName: "plus")
                     }
                 }
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("テンプレート保存") {
+                        saveCurrentAsTemplate()
+                    }
+                }
             }
             .sheet(item: $editingItem) { item in
                 // ShoppingItem → FoodItem に変換して編集画面へ
@@ -73,7 +79,8 @@ struct ShoppingListView: View {
                     name: item.name,
                     quantity: item.quantity,
                     expirationDate: item.expirationDate ?? Date(),
-                    storageType: item.storageType // ← ここ修正
+                    storageType: item.storageType,
+                    category: item.category
                 )
                 FoodRegisterView(itemToEdit: foodItem) { updatedItem in
                     // ✅ 編集後に ShoppingItem に戻す（storageType含めて）
@@ -82,7 +89,8 @@ struct ShoppingListView: View {
                         name: updatedItem.name,
                         quantity: updatedItem.quantity,
                         expirationDate: updatedItem.expirationDate,
-                        storageType: updatedItem.storageType, // ← 追加済みのプロパティ
+                        storageType: updatedItem.storageType,
+                        category: updatedItem.category,
                         manuallyAdded: true,
                         linkedFoodItemID: nil,
                         note: item.note,
@@ -119,15 +127,25 @@ struct ShoppingListView: View {
 
             let expirationDate = items.first?.expirationDate ?? Calendar.current.date(byAdding: .day, value: 7, to: Date())!
             let storageType = items.first?.storageType ?? .fridge
+            let category = items.first?.category ?? .other
 
             let newFoodItem = FoodItem(
                 name: name,
                 quantity: quantity,
                 expirationDate: expirationDate,
-                storageType: storageType
+                storageType: storageType,
+                category: category
             )
             foodViewModel.add(item: newFoodItem)
         }
+    }
+
+    private func saveCurrentAsTemplate() {
+        let items = shoppingViewModel.shoppingItems.map { item in
+            TemplateItem(id: item.id, name: item.name, quantity: item.quantity)
+        }
+        guard !items.isEmpty else { return }
+        templateViewModel.addTemplate(items)
     }
 }
 
