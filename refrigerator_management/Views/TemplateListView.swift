@@ -7,6 +7,8 @@ struct TemplateListView: View {
     @ObservedObject var templateViewModel: TemplateViewModel
     @ObservedObject var shoppingViewModel: ShoppingViewModel
     @Environment(\.presentationMode) var presentationMode
+    @State private var templateToApply: Template? = nil
+    @State private var showingConfirm = false
 
     var body: some View {
         NavigationView {
@@ -14,15 +16,15 @@ struct TemplateListView: View {
                 ForEach(templateViewModel.templates.indices, id: \.self) { index in
                     let template = templateViewModel.templates[index]
                     VStack(alignment: .leading) {
-                        Text("テンプレート \(index + 1)")
+                        Text(template.name)
                             .font(.headline)
-                        ForEach(template) { item in
+                        ForEach(template.items) { item in
                             Text("\(item.name) × \(item.quantity)")
                         }
                     }
                     .onTapGesture {
-                        addTemplateToShoppingList(template)
-                        presentationMode.wrappedValue.dismiss()
+                        templateToApply = template
+                        showingConfirm = true
                     }
                 }
                 .onDelete { indexSet in
@@ -36,11 +38,20 @@ struct TemplateListView: View {
                 EditButton()
             }
         }
+        .alert("このテンプレートを反映しますか？", isPresented: $showingConfirm, presenting: templateToApply) { template in
+            Button("キャンセル", role: .cancel) {}
+            Button("追加") {
+                addTemplateToShoppingList(template)
+                presentationMode.wrappedValue.dismiss()
+            }
+        } message: { _ in
+            Text("")
+        }
     }
 
     // テンプレートを買い物リストに反映（重複時は数量加算）
-    private func addTemplateToShoppingList(_ template: [TemplateItem]) {
-        for item in template {
+    private func addTemplateToShoppingList(_ template: Template) {
+        for item in template.items {
             if let index = shoppingViewModel.shoppingItems.firstIndex(where: { $0.name == item.name }) {
                 shoppingViewModel.shoppingItems[index].quantity += item.quantity
             } else {

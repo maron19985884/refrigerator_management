@@ -5,8 +5,8 @@ struct ShoppingListView: View {
     @ObservedObject var foodViewModel: FoodViewModel
     @ObservedObject var templateViewModel: TemplateViewModel
     @State private var editingItem: ShoppingItem? = nil
-    @State private var showingStoragePicker = false
-    @State private var selectedStorageType: StorageType = .fridge
+    @State private var showingTemplateNameAlert = false
+    @State private var newTemplateName: String = ""
 
     var body: some View {
         NavigationView {
@@ -46,7 +46,7 @@ struct ShoppingListView: View {
                 }
 
                 Button(action: {
-                    showingStoragePicker = true
+                    processCheckedItems()
                 }) {
                     Text("チェック済みを在庫に反映")
                         .font(.headline)
@@ -68,7 +68,8 @@ struct ShoppingListView: View {
                 }
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("テンプレート保存") {
-                        saveCurrentAsTemplate()
+                        newTemplateName = ""
+                        showingTemplateNameAlert = true
                     }
                 }
             }
@@ -100,20 +101,19 @@ struct ShoppingListView: View {
                     shoppingViewModel.updateItem(updatedShoppingItem)
                 }
             }
-            .confirmationDialog("保存場所を選択", isPresented: $showingStoragePicker, titleVisibility: .visible) {
-                ForEach(StorageType.allCases, id: \.self) { type in
-                    Button(type.rawValue) {
-                        selectedStorageType = type
-                        processCheckedItems()
-                    }
-                }
-            }
         }
         .navigationViewStyle(.stack)
+        .alert("テンプレート名を入力", isPresented: $showingTemplateNameAlert) {
+            TextField("テンプレート名", text: $newTemplateName)
+            Button("保存") {
+                saveCurrentAsTemplate()
+            }
+            Button("キャンセル", role: .cancel) {}
+        }
     }
 
     private func addNewItem() {
-        let newItem = ShoppingItem(name: "新しい食材")
+        let newItem = ShoppingItem(name: "")
         shoppingViewModel.add(newItem)
     }
 
@@ -145,7 +145,8 @@ struct ShoppingListView: View {
             TemplateItem(id: item.id, name: item.name, quantity: item.quantity)
         }
         guard !items.isEmpty else { return }
-        templateViewModel.addTemplate(items)
+        templateViewModel.addTemplate(name: newTemplateName.isEmpty ? "テンプレート" : newTemplateName, items: items)
+        showingTemplateNameAlert = false
     }
 }
 
