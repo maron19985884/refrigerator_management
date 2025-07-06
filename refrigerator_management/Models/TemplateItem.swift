@@ -7,10 +7,23 @@ struct TemplateItem: Identifiable, Codable, Equatable {
     let id: UUID
     var name: String
     var quantity: Int
+    var expirationDate: Date?
+    var storageType: StorageType
+    var category: FoodCategory
 
-    init(id: UUID = UUID(), name: String, quantity: Int = 1) {
+    init(
+        id: UUID = UUID(),
+        name: String,
+        quantity: Int = 1,
+        expirationDate: Date? = nil,
+        storageType: StorageType = .fridge,
+        category: FoodCategory = .other
+    ) {
         self.id = id
         self.name = name
         self.quantity = quantity
+        self.expirationDate = expirationDate
+        self.storageType = storageType
+        self.category = category
     }
 }

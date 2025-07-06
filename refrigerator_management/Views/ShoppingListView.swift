@@ -150,7 +150,14 @@ struct ShoppingListView: View {
 
     private func saveCurrentAsTemplate() {
         let items = shoppingViewModel.shoppingItems.map { item in
-            TemplateItem(id: item.id, name: item.name, quantity: item.quantity)
+            TemplateItem(
+                id: item.id,
+                name: item.name,
+                quantity: item.quantity,
+                expirationDate: item.expirationDate,
+                storageType: item.storageType,
+                category: item.category
+            )
         }
         guard !items.isEmpty else { return }
         templateViewModel.addTemplate(name: newTemplateName.isEmpty ? "テンプレート" : newTemplateName, items: items)

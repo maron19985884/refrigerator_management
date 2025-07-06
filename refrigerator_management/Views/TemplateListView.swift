@@ -17,7 +17,8 @@ struct TemplateListView: View {
                     let template = templateViewModel.templates[index]
                     VStack(alignment: .leading) {
                         Text(template.name)
-                            .font(.headline)
+                            .font(.title2)
+                            .bold()
                         ForEach(template.items) { item in
                             Text("\(item.name) × \(item.quantity)")
                         }
@@ -54,8 +55,17 @@ struct TemplateListView: View {
         for item in template.items {
             if let index = shoppingViewModel.shoppingItems.firstIndex(where: { $0.name == item.name }) {
                 shoppingViewModel.shoppingItems[index].quantity += item.quantity
+                shoppingViewModel.shoppingItems[index].expirationDate = item.expirationDate
+                shoppingViewModel.shoppingItems[index].storageType = item.storageType
+                shoppingViewModel.shoppingItems[index].category = item.category
             } else {
-                let newItem = ShoppingItem(name: item.name, quantity: item.quantity)
+                let newItem = ShoppingItem(
+                    name: item.name,
+                    quantity: item.quantity,
+                    expirationDate: item.expirationDate,
+                    storageType: item.storageType,
+                    category: item.category
+                )
                 shoppingViewModel.shoppingItems.append(newItem)
             }
         }
