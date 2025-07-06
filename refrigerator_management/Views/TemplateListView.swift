@@ -10,8 +10,9 @@ struct TemplateListView: View {
     @State private var templateToApply: Template? = nil
     @State private var showingConfirm = false
     @State private var editingIndex: Int? = nil
-    @State private var editingName: String = ""
-    @State private var showingEditAlert = false
+    @State private var showingEditSheet = false
+    @State private var deleteIndexSet: IndexSet? = nil
+    @State private var showingDeleteConfirm = false
 
     var body: some View {
         NavigationView {
@@ -23,6 +24,7 @@ struct TemplateListView: View {
                             Text(template.name)
                                 .font(.title2)
                                 .bold()
+                                .underline()
                             ForEach(template.items) { item in
                                 Text("\(item.name) × \(item.quantity)")
                             }
@@ -30,8 +32,7 @@ struct TemplateListView: View {
                         Spacer()
                         Button(action: {
                             editingIndex = index
-                            editingName = template.name
-                            showingEditAlert = true
+                            showingEditSheet = true
                         }) {
                             Image(systemName: "pencil")
                         }
@@ -44,9 +45,8 @@ struct TemplateListView: View {
                     }
                 }
                 .onDelete { indexSet in
-                    indexSet.forEach { index in
-                        templateViewModel.deleteTemplate(at: index)
-                    }
+                    deleteIndexSet = indexSet
+                    showingDeleteConfirm = true
                 }
             }
             .navigationTitle("テンプレート選択")
@@ -60,15 +60,23 @@ struct TemplateListView: View {
         } message: { _ in
             Text("")
         }
-        .alert("テンプレート名を編集", isPresented: $showingEditAlert) {
-            TextField("テンプレート名", text: $editingName)
-            Button("保存") {
-                if let index = editingIndex {
-                    templateViewModel.templates[index].name = editingName
-                    templateViewModel.saveTemplates()
+        .sheet(isPresented: $showingEditSheet) {
+            if let index = editingIndex {
+                NavigationView {
+                    TemplateEditView(template: $templateViewModel.templates[index])
                 }
             }
+        }
+        .alert("テンプレートを削除しますか？", isPresented: $showingDeleteConfirm) {
             Button("キャンセル", role: .cancel) {}
+            Button("削除", role: .destructive) {
+                if let set = deleteIndexSet {
+                    set.forEach { index in
+                        templateViewModel.deleteTemplate(at: index)
+                    }
+                    deleteIndexSet = nil
+                }
+            }
         }
     }
 

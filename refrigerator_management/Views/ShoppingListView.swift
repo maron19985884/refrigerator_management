@@ -8,6 +8,10 @@ struct ShoppingListView: View {
     @State private var showingRegister = false
     @State private var showingTemplateNameAlert = false
     @State private var newTemplateName: String = ""
+    @State private var editMode: EditMode = .inactive
+    @State private var selection = Set<UUID>()
+    @State private var showingDeleteConfirm = false
+    @State private var deleteOffsets: IndexSet? = nil
 
     private static let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -18,7 +22,7 @@ struct ShoppingListView: View {
     var body: some View {
         NavigationView {
             VStack {
-                List {
+                List(selection: $selection) {
                     ForEach(shoppingViewModel.shoppingItems) { item in
                         HStack(alignment: .top) {
                             Button(action: {
@@ -61,8 +65,12 @@ struct ShoppingListView: View {
                         .background(item.isChecked ? Color.green.opacity(0.15) : Color.clear)
                         .cornerRadius(8)
                     }
-                    .onDelete(perform: shoppingViewModel.delete)
+                    .onDelete { offsets in
+                        deleteOffsets = offsets
+                        showingDeleteConfirm = true
+                    }
                 }
+                .environment(\.editMode, $editMode)
 
                 Button(action: {
                     processCheckedItems()
@@ -80,15 +88,23 @@ struct ShoppingListView: View {
             }
             .navigationTitle("買い物リスト")
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItemGroup(placement: .navigationBarTrailing) {
                     Button(action: { showingRegister = true }) {
                         Image(systemName: "plus")
                     }
+                    EditButton()
                 }
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("テンプレート保存") {
-                        newTemplateName = ""
-                        showingTemplateNameAlert = true
+                    if editMode == .active {
+                        Button("削除") {
+                            deleteOffsets = nil
+                            showingDeleteConfirm = true
+                        }.disabled(selection.isEmpty)
+                    } else {
+                        Button("テンプレート保存") {
+                            newTemplateName = ""
+                            showingTemplateNameAlert = true
+                        }
                     }
                 }
             }
@@ -141,6 +157,12 @@ struct ShoppingListView: View {
             }
             Button("キャンセル", role: .cancel) {}
         }
+        .alert("選択した項目を削除しますか？", isPresented: $showingDeleteConfirm) {
+            Button("キャンセル", role: .cancel) {}
+            Button("削除", role: .destructive) {
+                performDelete()
+            }
+        }
     }
 
     // ✅ ShoppingItem の storageType / expirationDate を反映して在庫に変換
@@ -180,6 +202,21 @@ struct ShoppingListView: View {
         guard !items.isEmpty else { return }
         templateViewModel.addTemplate(name: newTemplateName.isEmpty ? "テンプレート" : newTemplateName, items: items)
         showingTemplateNameAlert = false
+    }
+
+    private func performDelete() {
+        if let offsets = deleteOffsets {
+            shoppingViewModel.shoppingItems.remove(atOffsets: offsets)
+            deleteOffsets = nil
+            selection.removeAll()
+        } else {
+            shoppingViewModel.shoppingItems.removeAll { item in
+                selection.contains(item.id)
+            }
+            selection.removeAll()
+        }
+        editMode = .inactive
+        shoppingViewModel.save()
     }
 
     private func color(for date: Date) -> Color {

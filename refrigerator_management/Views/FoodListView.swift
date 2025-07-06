@@ -7,6 +7,10 @@ struct FoodListView: View {
     @State private var showingRegister = false
     @State private var editingItem: FoodItem? = nil
     @StateObject var viewModel: FoodViewModel
+    @State private var editMode: EditMode = .inactive
+    @State private var selection = Set<UUID>()
+    @State private var showingDeleteConfirm = false
+    @State private var deleteOffsets: IndexSet? = nil
 
     private static let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -36,7 +40,7 @@ struct FoodListView: View {
                 .pickerStyle(.segmented)
                 .padding(.horizontal)
 
-                List {
+                List(selection: $selection) {
                     ForEach(filteredItems) { item in
                         Button(action: {
                             editingItem = item
@@ -52,8 +56,12 @@ struct FoodListView: View {
                             }
                         }
                     }
-                    .onDelete(perform: deleteItem)
+                    .onDelete { offsets in
+                        deleteOffsets = offsets
+                        showingDeleteConfirm = true
+                    }
                 }
+                .environment(\.editMode, $editMode)
             }
 
             // 右下の追加ボタン
@@ -85,14 +93,49 @@ struct FoodListView: View {
                 }
             }
         }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                EditButton()
+            }
+            ToolbarItem(placement: .navigationBarLeading) {
+                if editMode == .active {
+                    Button("削除") {
+                        deleteOffsets = nil
+                        showingDeleteConfirm = true
+                    }
+                    .disabled(selection.isEmpty)
+                }
+            }
+        }
+        .alert("選択した項目を削除しますか？", isPresented: $showingDeleteConfirm) {
+            Button("キャンセル", role: .cancel) {}
+            Button("削除", role: .destructive) {
+                performDelete()
+            }
+        }
     }
 
     func deleteItem(at offsets: IndexSet) {
-        let itemsToDelete = filteredItems
-        let indexesToDelete = offsets.map { itemsToDelete[$0].id }
-        viewModel.foodItems.removeAll { item in
-            indexesToDelete.contains(item.id)
+        deleteOffsets = offsets
+        showingDeleteConfirm = true
+    }
+
+    private func performDelete() {
+        if let offsets = deleteOffsets {
+            let itemsToDelete = filteredItems
+            let indexesToDelete = offsets.map { itemsToDelete[$0].id }
+            viewModel.foodItems.removeAll { item in
+                indexesToDelete.contains(item.id)
+            }
+            deleteOffsets = nil
+            selection.removeAll()
+        } else {
+            viewModel.foodItems.removeAll { item in
+                selection.contains(item.id)
+            }
+            selection.removeAll()
         }
+        editMode = .inactive
     }
 
     func color(for date: Date) -> Color {
