@@ -190,6 +190,10 @@ struct ShoppingListView: View {
                 processCheckedItems()
             }
         }
+        .onDisappear {
+            editMode = .inactive
+            selection.removeAll()
+        }
     }
     }
 
