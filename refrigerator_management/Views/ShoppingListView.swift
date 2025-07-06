@@ -21,26 +21,25 @@ struct ShoppingListView: View {
 
     var body: some View {
         NavigationView {
-            VStack {
-                List(selection: $selection) {
-                    ForEach(shoppingViewModel.shoppingItems) { item in
-                        HStack(alignment: .top) {
-                            Button(action: {
-                                shoppingViewModel.toggleCheck(for: item)
-                            }) {
-                                Image(systemName: item.isChecked ? "checkmark.circle.fill" : "circle")
-                                    .resizable()
-                                    .frame(width: 28, height: 28)
-                                    .foregroundColor(item.isChecked ? .green : .gray)
-                                    .padding(.trailing, 8)
-                            }
+            ZStack {
+                VStack {
+                    List(selection: $selection) {
+                        ForEach(shoppingViewModel.shoppingItems) { item in
+                            HStack(alignment: .top) {
+                                Button(action: {
+                                    shoppingViewModel.toggleCheck(for: item)
+                                }) {
+                                    Image(systemName: item.isChecked ? "checkmark.circle.fill" : "circle")
+                                        .resizable()
+                                        .frame(width: 28, height: 28)
+                                        .foregroundColor(item.isChecked ? .green : .gray)
+                                        .padding(.trailing, 8)
+                                }
+                                .disabled(editMode == .active)
 
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(item.name)
-                                    .strikethrough(item.isChecked)
-                                    .onTapGesture {
-                                        editingItem = item
-                                    }
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text(item.name)
+                                        .strikethrough(item.isChecked)
 
                                 HStack(spacing: 8) {
                                     Text("x\(item.quantity)")
@@ -60,6 +59,13 @@ struct ShoppingListView: View {
                                 }
                             }
                             Spacer()
+                        }
+                        .tag(item.id)
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            if editMode == .inactive {
+                                editingItem = item
+                            }
                         }
                         .padding(.vertical, 8)
                         .background(item.isChecked ? Color.green.opacity(0.15) : Color.clear)
@@ -85,14 +91,31 @@ struct ShoppingListView: View {
                         .padding(.horizontal)
                 }
                 .padding(.bottom)
+                Spacer()
             }
+            .overlay(
+                VStack {
+                    Spacer()
+                    HStack {
+                        Button(action: {
+                            withAnimation { editMode = editMode.isEditing ? .inactive : .active }
+                        }) {
+                            Image(systemName: editMode.isEditing ? "checkmark.circle.fill" : "pencil.circle.fill")
+                                .resizable()
+                                .frame(width: 60, height: 60)
+                                .foregroundColor(.orange)
+                                .padding()
+                        }
+                        Spacer()
+                    }
+                }
+            )
             .navigationTitle("買い物リスト")
             .toolbar {
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
                     Button(action: { showingRegister = true }) {
                         Image(systemName: "plus")
                     }
-                    EditButton()
                 }
                 ToolbarItem(placement: .navigationBarLeading) {
                     if editMode == .active {

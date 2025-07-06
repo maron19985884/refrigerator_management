@@ -42,17 +42,20 @@ struct FoodListView: View {
 
                 List(selection: $selection) {
                     ForEach(filteredItems) { item in
-                        Button(action: {
-                            editingItem = item
-                        }) {
-                            HStack {
-                                Text(item.name)
-                                Spacer()
-                                Text("x\(item.quantity)")
-                                Text(item.category.rawValue)
-                                Text(dateLabel(for: item.expirationDate))
-                                    .foregroundColor(color(for: item.expirationDate))
-                                    .font(.caption)
+                        HStack {
+                            Text(item.name)
+                            Spacer()
+                            Text("x\(item.quantity)")
+                            Text(item.category.rawValue)
+                            Text(dateLabel(for: item.expirationDate))
+                                .foregroundColor(color(for: item.expirationDate))
+                                .font(.caption)
+                        }
+                        .tag(item.id)
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            if editMode == .inactive {
+                                editingItem = item
                             }
                         }
                     }
@@ -68,6 +71,15 @@ struct FoodListView: View {
             VStack {
                 Spacer()
                 HStack {
+                    Button(action: {
+                        withAnimation { editMode = editMode.isEditing ? .inactive : .active }
+                    }) {
+                        Image(systemName: editMode.isEditing ? "checkmark.circle.fill" : "pencil.circle.fill")
+                            .resizable()
+                            .frame(width: 60, height: 60)
+                            .foregroundColor(.orange)
+                            .padding()
+                    }
                     Spacer()
                     Button(action: {
                         showingRegister = true
@@ -94,9 +106,6 @@ struct FoodListView: View {
             }
         }
         .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                EditButton()
-            }
             ToolbarItem(placement: .navigationBarLeading) {
                 if editMode == .active {
                     Button("削除") {
