@@ -27,11 +27,6 @@ struct FoodListView: View {
     var body: some View {
         ZStack {
             VStack {
-                Text("食材一覧")
-                    .font(.largeTitle)
-                    .bold()
-                    .padding(.top)
-
                 Picker("保存場所", selection: $selectedStorage) {
                     ForEach(StorageType.allCases) { type in
                         Text(type.rawValue).tag(type)
@@ -130,6 +125,11 @@ struct FoodListView: View {
                 performDelete()
             }
         }
+        .onDisappear {
+            editMode = .inactive
+            selection.removeAll()
+        }
+        .navigationTitle("食材一覧")
     }
 
     func deleteItem(at offsets: IndexSet) {
