@@ -17,6 +17,13 @@ class FoodViewModel: ObservableObject {
         load()
     }
 
+    /// 指定した保存場所の食材を賞味期限順に取得
+    func items(for storage: StorageType) -> [FoodItem] {
+        foodItems
+            .filter { $0.storageType == storage }
+            .sorted { $0.expirationDate < $1.expirationDate }
+    }
+
     // 新規追加
     func add(item: FoodItem) {
         foodItems.append(item)
