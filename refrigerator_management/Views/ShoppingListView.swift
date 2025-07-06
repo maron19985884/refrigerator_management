@@ -58,15 +58,15 @@ struct ShoppingListView: View {
                                         .foregroundColor(.gray)
                                 }
                             }
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                if editMode == .inactive {
+                                    editingItem = item
+                                }
+                            }
                             Spacer()
                         }
                         .tag(item.id)
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            if editMode == .inactive {
-                                editingItem = item
-                            }
-                        }
                         .padding(.vertical, 8)
                         .background(item.isChecked ? Color.green.opacity(0.15) : Color.clear)
                         .cornerRadius(8)
