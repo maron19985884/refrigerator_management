@@ -12,16 +12,8 @@ struct FoodListView: View {
     @State private var showingDeleteConfirm = false
     @State private var deleteOffsets: IndexSet? = nil
 
-    private static let dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "M/d"
-        return formatter
-    }()
-
     var filteredItems: [FoodItem] {
-        viewModel.foodItems
-            .filter { $0.storageType == selectedStorage }
-            .sorted { $0.expirationDate < $1.expirationDate }
+        viewModel.items(for: selectedStorage)
     }
 
     var body: some View {
@@ -159,27 +151,10 @@ struct FoodListView: View {
     }
 
     func color(for date: Date) -> Color {
-        let calendar = Calendar.current
-        let today = calendar.startOfDay(for: Date())
-        if date < today {
-            return .red
-        } else if calendar.isDateInTomorrow(date) {
-            return .orange
-        } else {
-            return .gray
-        }
+        DateUtils.color(for: date)
     }
 
     func dateLabel(for date: Date) -> String {
-        let calendar = Calendar.current
-        if date < calendar.startOfDay(for: Date()) {
-            return "期限切れ"
-        } else if calendar.isDateInToday(date) {
-            return "本日まで"
-        } else if calendar.isDateInTomorrow(date) {
-            return "明日まで"
-        } else {
-            return "期限: \(Self.dateFormatter.string(from: date))"
-        }
+        DateUtils.label(for: date)
     }
 }
