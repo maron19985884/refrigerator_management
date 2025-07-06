@@ -49,6 +49,15 @@ class ShoppingViewModel: ObservableObject {
         return checkedItems
     }
 
+    /// ShoppingItem を更新する
+    /// - Parameter item: 更新対象の ShoppingItem
+    func updateItem(_ item: ShoppingItem) {
+        if let index = shoppingItems.firstIndex(where: { $0.id == item.id }) {
+            shoppingItems[index] = item
+            save()
+        }
+    }
+
     // 保存（バックグラウンドで実行）
     func save() {
         let items = shoppingItems

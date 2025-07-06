@@ -14,6 +14,7 @@ final class refrigerator_managementUITestsLaunchTests: XCTestCase {
     }
 
     override func setUpWithError() throws {
+        // 失敗しても次のテストに影響を与えないように設定
         continueAfterFailure = false
     }
 
