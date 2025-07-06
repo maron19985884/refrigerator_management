@@ -187,6 +187,8 @@ struct ShoppingListView: View {
             }
         }
     }
+    }
+
 
     // ✅ ShoppingItem の storageType / expirationDate を反映して在庫に変換
     private func processCheckedItems() {
