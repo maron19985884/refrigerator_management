@@ -11,34 +11,48 @@ struct TemplateEditView: View {
             }
 
             Section(header: Text("食材一覧")) {
-                ForEach($template.items) { $item in
+                ForEach(template.items.indices, id: \.self) { index in
                     VStack(alignment: .leading) {
-                        TextField("食材名", text: $item.name)
-                        Stepper(value: $item.quantity, in: 1...99) {
-                            Text("数量: \(item.quantity)")
+                        TextField("食材名", text: $template.items[index].name)
+                        Stepper(value: $template.items[index].quantity, in: 1...99) {
+                            Text("数量: \(template.items[index].quantity)")
                         }
                         DatePicker(
                             "賞味期限",
                             selection: Binding(
-                                get: { item.expirationDate ?? Date() },
-                                set: { item.expirationDate = $0 }
+                                get: { template.items[index].expirationDate ?? Date() },
+                                set: { template.items[index].expirationDate = $0 }
                             ),
                             displayedComponents: .date
                         )
-                        Picker("保存場所", selection: $item.storageType) {
+                        Picker("保存場所", selection: $template.items[index].storageType) {
                             ForEach(StorageType.allCases) { type in
                                 Text(type.rawValue).tag(type)
                             }
                         }
-                        Picker("カテゴリ", selection: $item.category) {
+                        Picker("カテゴリ", selection: $template.items[index].category) {
                             ForEach(FoodCategory.allCases) { cat in
                                 Text(cat.rawValue).tag(cat)
                             }
                         }
+                        HStack {
+                            Spacer()
+                            Button(role: .destructive) {
+                                template.items.remove(at: index)
+                            } label: {
+                                Image(systemName: "trash")
+                                    .foregroundColor(.red)
+                            }
+                        }
                     }
                 }
-                .onDelete { offsets in
-                    template.items.remove(atOffsets: offsets)
+                Button(action: {
+                    template.items.append(TemplateItem(name: ""))
+                }) {
+                    HStack {
+                        Image(systemName: "plus.circle.fill")
+                        Text("食材を追加")
+                    }
                 }
             }
         }
