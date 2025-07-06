@@ -42,15 +42,22 @@ struct FoodListView: View {
 
                 List(selection: $selection) {
                     ForEach(filteredItems) { item in
-                        HStack {
-                            Text(item.name)
-                            Spacer()
-                            Text("x\(item.quantity)")
-                            Text(item.category.rawValue)
-                            Text(dateLabel(for: item.expirationDate))
-                                .foregroundColor(color(for: item.expirationDate))
+                        HStack(alignment: .top) {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(item.name)
+                                    .font(.headline)
+                                HStack(spacing: 8) {
+                                    Text("x\(item.quantity)")
+                                    Text(item.category.rawValue)
+                                    Text(dateLabel(for: item.expirationDate))
+                                        .foregroundColor(color(for: item.expirationDate))
+                                }
                                 .font(.caption)
+                                .foregroundColor(.gray)
+                            }
+                            Spacer()
                         }
+                        .padding(.vertical, 4)
                         .tag(item.id)
                         .contentShape(Rectangle())
                         .onTapGesture {
@@ -65,6 +72,7 @@ struct FoodListView: View {
                     }
                 }
                 .environment(\.editMode, $editMode)
+                .listStyle(.insetGrouped)
             }
 
             // 右下の追加ボタン

@@ -19,14 +19,16 @@ struct TemplateListView: View {
             List {
                 ForEach(templateViewModel.templates.indices, id: \.self) { index in
                     let template = templateViewModel.templates[index]
-                    HStack {
-                        VStack(alignment: .leading) {
+                    HStack(alignment: .top) {
+                        VStack(alignment: .leading, spacing: 4) {
                             Text(template.name)
-                                .font(.title2)
+                                .font(.title3)
                                 .bold()
                                 .underline()
                             ForEach(template.items) { item in
                                 Text("\(item.name) × \(item.quantity)")
+                                    .font(.caption)
+                                    .foregroundColor(.gray)
                             }
                         }
                         Spacer()
@@ -38,6 +40,7 @@ struct TemplateListView: View {
                         }
                         .buttonStyle(BorderlessButtonStyle())
                     }
+                    .padding(.vertical, 4)
                     .contentShape(Rectangle())
                     .onTapGesture {
                         templateToApply = template
@@ -49,6 +52,7 @@ struct TemplateListView: View {
                     showingDeleteConfirm = true
                 }
             }
+            .listStyle(.insetGrouped)
             .navigationTitle("買い物テンプレート")
         }
         .alert("このテンプレートを買い物リストに反映しますか？", isPresented: $showingConfirm, presenting: templateToApply) { template in
