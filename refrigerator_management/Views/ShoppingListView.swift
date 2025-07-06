@@ -9,12 +9,18 @@ struct ShoppingListView: View {
     @State private var showingTemplateNameAlert = false
     @State private var newTemplateName: String = ""
 
+    private static let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "M/d"
+        return formatter
+    }()
+
     var body: some View {
         NavigationView {
             VStack {
                 List {
                     ForEach(shoppingViewModel.shoppingItems) { item in
-                        HStack {
+                        HStack(alignment: .top) {
                             Button(action: {
                                 shoppingViewModel.toggleCheck(for: item)
                             }) {
@@ -25,19 +31,31 @@ struct ShoppingListView: View {
                                     .padding(.trailing, 8)
                             }
 
-                            Text(item.name)
-                                .strikethrough(item.isChecked)
-                                .onTapGesture {
-                                    editingItem = item
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(item.name)
+                                    .strikethrough(item.isChecked)
+                                    .onTapGesture {
+                                        editingItem = item
+                                    }
+
+                                HStack(spacing: 8) {
+                                    Text("x\(item.quantity)")
+                                    Text(item.category.rawValue)
+                                    if let date = item.expirationDate {
+                                        Text(dateLabel(for: date))
+                                            .foregroundColor(color(for: date))
+                                    }
                                 }
+                                .font(.caption)
+                                .foregroundColor(.gray)
 
-                            Spacer()
-
-                            if let note = item.note, !note.isEmpty {
-                                Text(note)
-                                    .font(.caption)
-                                    .foregroundColor(.gray)
+                                if let note = item.note, !note.isEmpty {
+                                    Text(note)
+                                        .font(.caption)
+                                        .foregroundColor(.gray)
+                                }
                             }
+                            Spacer()
                         }
                         .padding(.vertical, 8)
                         .background(item.isChecked ? Color.green.opacity(0.15) : Color.clear)
@@ -162,6 +180,31 @@ struct ShoppingListView: View {
         guard !items.isEmpty else { return }
         templateViewModel.addTemplate(name: newTemplateName.isEmpty ? "テンプレート" : newTemplateName, items: items)
         showingTemplateNameAlert = false
+    }
+
+    private func color(for date: Date) -> Color {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        if date < today {
+            return .red
+        } else if calendar.isDateInTomorrow(date) {
+            return .orange
+        } else {
+            return .gray
+        }
+    }
+
+    private func dateLabel(for date: Date) -> String {
+        let calendar = Calendar.current
+        if date < calendar.startOfDay(for: Date()) {
+            return "期限切れ"
+        } else if calendar.isDateInToday(date) {
+            return "本日まで"
+        } else if calendar.isDateInTomorrow(date) {
+            return "明日まで"
+        } else {
+            return "期限: \(Self.dateFormatter.string(from: date))"
+        }
     }
 }
 
