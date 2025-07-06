@@ -182,7 +182,7 @@ struct ShoppingListView: View {
                 performDelete()
             }
         }
-        .alert("チェック済みの項目を在庫に移動しますか？", isPresented: $showingCartConfirm) {
+        .alert("チェック済みの項目を食材一覧に移動しますか？", isPresented: $showingCartConfirm) {
             Button("キャンセル", role: .cancel) {}
             Button("移動", role: .destructive) {
                 processCheckedItems()

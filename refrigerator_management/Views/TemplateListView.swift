@@ -49,7 +49,7 @@ struct TemplateListView: View {
                     showingDeleteConfirm = true
                 }
             }
-            .navigationTitle("テンプレート選択")
+            .navigationTitle("買い物テンプレート")
         }
         .alert("このテンプレートを買い物リストに反映しますか？", isPresented: $showingConfirm, presenting: templateToApply) { template in
             Button("キャンセル", role: .cancel) {}
