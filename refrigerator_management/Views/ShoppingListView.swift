@@ -73,9 +73,15 @@ struct ShoppingListView: View {
                         .background(item.isChecked ? Color.green.opacity(0.15) : Color.clear)
                         .cornerRadius(8)
                     }
-                    .onDelete { offsets in
-                        deleteOffsets = offsets
-                        showingDeleteConfirm = true
+                    .swipeActions {
+                        Button(role: .destructive) {
+                            if let index = shoppingViewModel.shoppingItems.firstIndex(where: { $0.id == item.id }) {
+                                deleteOffsets = IndexSet(integer: index)
+                                showingDeleteConfirm = true
+                            }
+                        } label: {
+                            Label("削除", systemImage: "trash")
+                        }
                     }
                 }
                 .environment(\.editMode, $editMode)
