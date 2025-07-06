@@ -5,6 +5,7 @@ struct ShoppingListView: View {
     @ObservedObject var foodViewModel: FoodViewModel
     @ObservedObject var templateViewModel: TemplateViewModel
     @State private var editingItem: ShoppingItem? = nil
+    @State private var showingRegister = false
     @State private var showingTemplateNameAlert = false
     @State private var newTemplateName: String = ""
 
@@ -62,7 +63,7 @@ struct ShoppingListView: View {
             .navigationTitle("買い物リスト")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: addNewItem) {
+                    Button(action: { showingRegister = true }) {
                         Image(systemName: "plus")
                     }
                 }
@@ -103,6 +104,18 @@ struct ShoppingListView: View {
             }
         }
         .navigationViewStyle(.stack)
+        .sheet(isPresented: $showingRegister) {
+            FoodRegisterView { newItem in
+                let shoppingItem = ShoppingItem(
+                    name: newItem.name,
+                    quantity: newItem.quantity,
+                    expirationDate: newItem.expirationDate,
+                    storageType: newItem.storageType,
+                    category: newItem.category
+                )
+                shoppingViewModel.add(shoppingItem)
+            }
+        }
         .alert("テンプレート名を入力", isPresented: $showingTemplateNameAlert) {
             TextField("テンプレート名", text: $newTemplateName)
             Button("保存") {
@@ -110,11 +123,6 @@ struct ShoppingListView: View {
             }
             Button("キャンセル", role: .cancel) {}
         }
-    }
-
-    private func addNewItem() {
-        let newItem = ShoppingItem(name: "")
-        shoppingViewModel.add(newItem)
     }
 
     // ✅ ShoppingItem の storageType / expirationDate を反映して在庫に変換
