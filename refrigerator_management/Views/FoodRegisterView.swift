@@ -7,6 +7,7 @@ struct FoodRegisterView: View {
     @State private var name: String = ""
     @State private var quantity: Int = 1
     @State private var expirationDate: Date = Date()
+    @State private var showingDatePicker = false
     @State private var storageType: StorageType = .fridge
     @State private var category: FoodCategory = .other
 
@@ -33,8 +34,27 @@ struct FoodRegisterView: View {
                 }
 
                 Section(header: Text("賞味期限")) {
-                    DatePicker("", selection: $expirationDate, displayedComponents: .date)
-                        .datePickerStyle(.compact)
+                    Button(action: { showingDatePicker = true }) {
+                        HStack {
+                            Text(expirationDate, style: .date)
+                            Spacer()
+                            Image(systemName: "calendar")
+                        }
+                    }
+                    .sheet(isPresented: $showingDatePicker) {
+                        VStack {
+                            DatePicker("", selection: $expirationDate, displayedComponents: .date)
+                                .datePickerStyle(.graphical)
+                                .labelsHidden()
+                                .onChange(of: expirationDate) { _ in
+                                    showingDatePicker = false
+                                }
+                            Button("閉じる") {
+                                showingDatePicker = false
+                            }
+                            .padding()
+                        }
+                    }
                 }
 
                 Section(header: Text("保存場所")) {

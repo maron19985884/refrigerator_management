@@ -4,7 +4,7 @@
 import Foundation
 
 class TemplateViewModel: ObservableObject {
-    @Published var templates: [[TemplateItem]] = []
+    @Published var templates: [Template] = []
 
     private let storageKey = "savedTemplates"
     private let userDefaults = UserDefaults.standard
@@ -14,7 +14,8 @@ class TemplateViewModel: ObservableObject {
     }
 
     // テンプレート追加
-    func addTemplate(_ template: [TemplateItem]) {
+    func addTemplate(name: String, items: [TemplateItem]) {
+        let template = Template(name: name, items: items)
         templates.append(template)
         saveTemplates()
     }
@@ -30,7 +31,7 @@ class TemplateViewModel: ObservableObject {
     func loadTemplates() {
         DispatchQueue.global(qos: .background).async {
             if let data = self.userDefaults.data(forKey: self.storageKey),
-               let decoded = try? JSONDecoder().decode([[TemplateItem]].self, from: data) {
+               let decoded = try? JSONDecoder().decode([Template].self, from: data) {
                 DispatchQueue.main.async {
                     self.templates = decoded
                 }
