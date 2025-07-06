@@ -12,6 +12,7 @@ struct ShoppingListView: View {
     @State private var selection = Set<UUID>()
     @State private var showingDeleteConfirm = false
     @State private var deleteOffsets: IndexSet? = nil
+    @State private var showingCartConfirm = false
 
     private static let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -94,7 +95,7 @@ struct ShoppingListView: View {
                         }
                         Spacer()
                         Button(action: {
-                            processCheckedItems()
+                            showingCartConfirm = true
                         }) {
                             Image(systemName: "cart.fill.badge.plus")
                                 .resizable()
@@ -179,6 +180,12 @@ struct ShoppingListView: View {
             Button("キャンセル", role: .cancel) {}
             Button("削除", role: .destructive) {
                 performDelete()
+            }
+        }
+        .alert("チェック済みの項目を在庫に移動しますか？", isPresented: $showingCartConfirm) {
+            Button("キャンセル", role: .cancel) {}
+            Button("移動", role: .destructive) {
+                processCheckedItems()
             }
         }
     }
