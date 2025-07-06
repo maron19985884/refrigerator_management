@@ -51,7 +51,7 @@ struct TemplateListView: View {
             }
             .navigationTitle("テンプレート選択")
         }
-        .alert("このテンプレートを反映しますか？", isPresented: $showingConfirm, presenting: templateToApply) { template in
+        .alert("このテンプレートを買い物リストに反映しますか？", isPresented: $showingConfirm, presenting: templateToApply) { template in
             Button("キャンセル", role: .cancel) {}
             Button("追加") {
                 addTemplateToShoppingList(template)

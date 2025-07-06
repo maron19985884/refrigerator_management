@@ -78,20 +78,6 @@ struct ShoppingListView: View {
                 }
                 .environment(\.editMode, $editMode)
 
-                Button(action: {
-                    processCheckedItems()
-                }) {
-                    Text("チェック済みを在庫に反映")
-                        .font(.headline)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(12)
-                        .padding(.horizontal)
-                }
-                .padding(.bottom)
-                Spacer()
             }
             .overlay(
                 VStack {
@@ -107,6 +93,15 @@ struct ShoppingListView: View {
                                 .padding()
                         }
                         Spacer()
+                        Button(action: {
+                            processCheckedItems()
+                        }) {
+                            Image(systemName: "cart.fill.badge.plus")
+                                .resizable()
+                                .frame(width: 60, height: 60)
+                                .foregroundColor(.blue)
+                                .padding()
+                        }
                     }
                 }
             )
