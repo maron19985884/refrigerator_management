@@ -40,6 +40,7 @@ struct ShoppingListView: View {
 
                                 VStack(alignment: .leading, spacing: 4) {
                                     Text(item.name)
+                                        .font(.headline)
                                         .strikethrough(item.isChecked)
 
                                 HStack(spacing: 8) {
@@ -78,6 +79,7 @@ struct ShoppingListView: View {
                     }
                 }
                 .environment(\.editMode, $editMode)
+                .listStyle(.insetGrouped)
 
             }
             .overlay(
