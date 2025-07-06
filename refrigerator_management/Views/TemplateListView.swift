@@ -9,20 +9,35 @@ struct TemplateListView: View {
     @Environment(\.presentationMode) var presentationMode
     @State private var templateToApply: Template? = nil
     @State private var showingConfirm = false
+    @State private var editingIndex: Int? = nil
+    @State private var editingName: String = ""
+    @State private var showingEditAlert = false
 
     var body: some View {
         NavigationView {
             List {
                 ForEach(templateViewModel.templates.indices, id: \.self) { index in
                     let template = templateViewModel.templates[index]
-                    VStack(alignment: .leading) {
-                        Text(template.name)
-                            .font(.title2)
-                            .bold()
-                        ForEach(template.items) { item in
-                            Text("\(item.name) × \(item.quantity)")
+                    HStack {
+                        VStack(alignment: .leading) {
+                            Text(template.name)
+                                .font(.title2)
+                                .bold()
+                            ForEach(template.items) { item in
+                                Text("\(item.name) × \(item.quantity)")
+                            }
                         }
+                        Spacer()
+                        Button(action: {
+                            editingIndex = index
+                            editingName = template.name
+                            showingEditAlert = true
+                        }) {
+                            Image(systemName: "pencil")
+                        }
+                        .buttonStyle(BorderlessButtonStyle())
                     }
+                    .contentShape(Rectangle())
                     .onTapGesture {
                         templateToApply = template
                         showingConfirm = true
@@ -35,9 +50,6 @@ struct TemplateListView: View {
                 }
             }
             .navigationTitle("テンプレート選択")
-            .toolbar {
-                EditButton()
-            }
         }
         .alert("このテンプレートを反映しますか？", isPresented: $showingConfirm, presenting: templateToApply) { template in
             Button("キャンセル", role: .cancel) {}
@@ -47,6 +59,16 @@ struct TemplateListView: View {
             }
         } message: { _ in
             Text("")
+        }
+        .alert("テンプレート名を編集", isPresented: $showingEditAlert) {
+            TextField("テンプレート名", text: $editingName)
+            Button("保存") {
+                if let index = editingIndex {
+                    templateViewModel.templates[index].name = editingName
+                    templateViewModel.saveTemplates()
+                }
+            }
+            Button("キャンセル", role: .cancel) {}
         }
     }
 
