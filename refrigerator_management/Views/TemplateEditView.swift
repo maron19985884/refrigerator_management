@@ -3,7 +3,7 @@ import SwiftUI
 struct TemplateEditView: View {
     @Binding var template: Template
     @Environment(\.presentationMode) var presentationMode
-    @State private var deleteIndex: Int? = nil
+    @State private var deleteItemID: UUID? = nil
     @State private var showingDeleteConfirm = false
 
     var body: some View {
@@ -13,26 +13,26 @@ struct TemplateEditView: View {
             }
 
             Section(header: Text("食材一覧")) {
-                ForEach(template.items.indices, id: \.self) { index in
+                ForEach($template.items) { $item in
                     VStack(alignment: .leading) {
-                        TextField("食材名", text: $template.items[index].name)
-                        Stepper(value: $template.items[index].quantity, in: 1...99) {
-                            Text("数量: \(template.items[index].quantity)")
+                        TextField("食材名", text: $item.name)
+                        Stepper(value: $item.quantity, in: 1...99) {
+                            Text("数量: \(item.quantity)")
                         }
                         DatePicker(
                             "賞味期限",
                             selection: Binding(
-                                get: { template.items[index].expirationDate ?? Date() },
-                                set: { template.items[index].expirationDate = $0 }
+                                get: { item.expirationDate ?? Date() },
+                                set: { item.expirationDate = $0 }
                             ),
                             displayedComponents: .date
                         )
-                        Picker("保存場所", selection: $template.items[index].storageType) {
+                        Picker("保存場所", selection: $item.storageType) {
                             ForEach(StorageType.allCases) { type in
                                 Text(type.rawValue).tag(type)
                             }
                         }
-                        Picker("カテゴリ", selection: $template.items[index].category) {
+                        Picker("カテゴリ", selection: $item.category) {
                             ForEach(FoodCategory.allCases) { cat in
                                 Text(cat.rawValue).tag(cat)
                             }
@@ -40,7 +40,7 @@ struct TemplateEditView: View {
                         HStack {
                             Spacer()
                             Button(role: .destructive) {
-                                deleteIndex = index
+                                deleteItemID = item.id
                                 showingDeleteConfirm = true
                             } label: {
                                 Image(systemName: "trash")
@@ -68,9 +68,9 @@ struct TemplateEditView: View {
         .alert("この食材を削除しますか？", isPresented: $showingDeleteConfirm) {
             Button("キャンセル", role: .cancel) {}
             Button("削除", role: .destructive) {
-                if let index = deleteIndex {
+                if let id = deleteItemID, let index = template.items.firstIndex(where: { $0.id == id }) {
                     template.items.remove(at: index)
-                    deleteIndex = nil
+                    deleteItemID = nil
                 }
             }
         }

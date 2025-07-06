@@ -62,9 +62,15 @@ struct FoodListView: View {
                             }
                         }
                     }
-                    .onDelete { offsets in
-                        deleteOffsets = offsets
-                        showingDeleteConfirm = true
+                    .swipeActions {
+                        Button(role: .destructive) {
+                            if let index = filteredItems.firstIndex(where: { $0.id == item.id }) {
+                                deleteOffsets = IndexSet(integer: index)
+                                showingDeleteConfirm = true
+                            }
+                        } label: {
+                            Label("削除", systemImage: "trash")
+                        }
                     }
                 }
                 .environment(\.editMode, $editMode)
@@ -133,11 +139,6 @@ struct FoodListView: View {
         .navigationTitle("食材一覧")
     }
 }
-
-    func deleteItem(at offsets: IndexSet) {
-        deleteOffsets = offsets
-        showingDeleteConfirm = true
-    }
 
     private func performDelete() {
         if let offsets = deleteOffsets {
