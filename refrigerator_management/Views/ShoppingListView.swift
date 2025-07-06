@@ -4,6 +4,7 @@ struct ShoppingListView: View {
     @ObservedObject var shoppingViewModel: ShoppingViewModel
     @ObservedObject var foodViewModel: FoodViewModel
     @ObservedObject var templateViewModel: TemplateViewModel
+
     @State private var editingItem: ShoppingItem? = nil
     @State private var showingRegister = false
     @State private var showingTemplateNameAlert = false
@@ -24,7 +25,7 @@ struct ShoppingListView: View {
         NavigationView {
             ZStack {
                 VStack {
-                    List(selection: $selection) {
+                    List {
                         ForEach(shoppingViewModel.shoppingItems) { item in
                             HStack(alignment: .top) {
                                 Button(action: {
@@ -43,22 +44,24 @@ struct ShoppingListView: View {
                                         .font(.headline)
                                         .strikethrough(item.isChecked)
 
-                                HStack(spacing: 8) {
-                                    Text("x\(item.quantity)")
-                                    Text(item.category.rawValue)
-                                    if let date = item.expirationDate {
-                                        Text(dateLabel(for: date))
-                                            .foregroundColor(color(for: date))
+                                    HStack(spacing: 8) {
+                                        Text("x\(item.quantity)")
+                                        Text(item.category.rawValue)
+                                        if let date = item.expirationDate {
+                                            Text(dateLabel(for: date))
+                                                .foregroundColor(color(for: date))
+                                        }
+                                    }
+                                    .font(.caption)
+                                    .foregroundColor(.gray)
+
+                                    if let note = item.note, !note.isEmpty {
+                                        Text(note)
+                                            .font(.caption)
+                                            .foregroundColor(.gray)
                                     }
                                 }
-                                .font(.caption)
-                                .foregroundColor(.gray)
-
-                                if let note = item.note, !note.isEmpty {
-                                    Text(note)
-                                        .font(.caption)
-                                        .foregroundColor(.gray)
-                                }
+                                Spacer()
                             }
                             .contentShape(Rectangle())
                             .onTapGesture {
@@ -66,29 +69,26 @@ struct ShoppingListView: View {
                                     editingItem = item
                                 }
                             }
-                            Spacer()
-                        }
-                        .tag(item.id)
-                        .padding(.vertical, 8)
-                        .background(item.isChecked ? Color.green.opacity(0.15) : Color.clear)
-                        .cornerRadius(8)
-                    }
-                    .swipeActions {
-                        Button(role: .destructive) {
-                            if let index = shoppingViewModel.shoppingItems.firstIndex(where: { $0.id == item.id }) {
-                                deleteOffsets = IndexSet(integer: index)
-                                showingDeleteConfirm = true
+                            .padding(.vertical, 8)
+                            .background(item.isChecked ? Color.green.opacity(0.15) : Color.clear)
+                            .cornerRadius(8)
+                            .swipeActions {
+                                Button(role: .destructive) {
+                                    if let index = shoppingViewModel.shoppingItems.firstIndex(where: { $0.id == item.id }) {
+                                        deleteOffsets = IndexSet(integer: index)
+                                        showingDeleteConfirm = true
+                                    }
+                                } label: {
+                                    Label("削除", systemImage: "trash")
+                                }
                             }
-                        } label: {
-                            Label("削除", systemImage: "trash")
                         }
                     }
+                    .environment(\.editMode, $editMode)
+                    .listStyle(.insetGrouped)
                 }
-                .environment(\.editMode, $editMode)
-                .listStyle(.insetGrouped)
 
-            }
-            .overlay(
+                // 編集・在庫追加ボタン
                 VStack {
                     Spacer()
                     HStack {
@@ -113,7 +113,7 @@ struct ShoppingListView: View {
                         }
                     }
                 }
-            )
+            }
             .navigationTitle("買い物リスト")
             .toolbar {
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
@@ -136,7 +136,6 @@ struct ShoppingListView: View {
                 }
             }
             .sheet(item: $editingItem) { item in
-                // ShoppingItem → FoodItem に変換して編集画面へ
                 let foodItem = FoodItem(
                     id: item.id,
                     name: item.name,
@@ -146,7 +145,6 @@ struct ShoppingListView: View {
                     category: item.category
                 )
                 FoodRegisterView(itemToEdit: foodItem) { updatedItem in
-                    // ✅ 編集後に ShoppingItem に戻す（storageType含めて）
                     let updatedShoppingItem = ShoppingItem(
                         id: updatedItem.id,
                         name: updatedItem.name,
@@ -201,10 +199,7 @@ struct ShoppingListView: View {
             selection.removeAll()
         }
     }
-    }
 
-
-    // ✅ ShoppingItem の storageType / expirationDate を反映して在庫に変換
     private func processCheckedItems() {
         let checkedItems = shoppingViewModel.extractCheckedItemsAndRemove()
         let groupedItems = Dictionary(grouping: checkedItems, by: { $0.name })
@@ -283,4 +278,3 @@ struct ShoppingListView: View {
         }
     }
 }
-
