@@ -11,7 +11,9 @@ import SwiftUI
 struct refrigerator_managementApp: App {
     var body: some Scene {
         WindowGroup {
+            // アプリのメイン画面を表示
             ContentView()
+                // アプリ全体のロケールを日本語に設定
                 .environment(\.locale, Locale(identifier: "ja_JP"))
         }
     }
