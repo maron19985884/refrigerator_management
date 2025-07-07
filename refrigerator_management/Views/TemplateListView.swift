@@ -90,6 +90,7 @@ struct TemplateListView: View {
             if let index = shoppingViewModel.shoppingItems.firstIndex(where: { $0.name == item.name }) {
                 shoppingViewModel.shoppingItems[index].quantity += item.quantity
                 shoppingViewModel.shoppingItems[index].expirationDate = item.expirationDate
+                shoppingViewModel.shoppingItems[index].expirationPeriod = item.expirationPeriod
                 shoppingViewModel.shoppingItems[index].storageType = item.storageType
                 shoppingViewModel.shoppingItems[index].category = item.category
             } else {
@@ -97,6 +98,7 @@ struct TemplateListView: View {
                     name: item.name,
                     quantity: item.quantity,
                     expirationDate: item.expirationDate,
+                    expirationPeriod: item.expirationPeriod,
                     storageType: item.storageType,
                     category: item.category
                 )

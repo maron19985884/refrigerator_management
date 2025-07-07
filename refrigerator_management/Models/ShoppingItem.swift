@@ -12,6 +12,9 @@ struct ShoppingItem: Identifiable, Codable, Equatable {
     /// 食材を在庫に変換する際の賞味期限
     var expirationDate: Date?
 
+    /// 食材を在庫に変換する際の賞味期間(日数)
+    var expirationPeriod: Int?
+
     /// 食材を在庫に変換する際の保存場所
     var storageType: StorageType = .fridge
 
@@ -27,6 +30,7 @@ struct ShoppingItem: Identifiable, Codable, Equatable {
         name: String,
         quantity: Int = 1,
         expirationDate: Date? = nil,
+        expirationPeriod: Int? = nil,
         storageType: StorageType = .fridge,
         category: FoodCategory = .other,
         manuallyAdded: Bool = true,
@@ -39,6 +43,7 @@ struct ShoppingItem: Identifiable, Codable, Equatable {
         self.name = name
         self.quantity = quantity
         self.expirationDate = expirationDate
+        self.expirationPeriod = expirationPeriod
         self.storageType = storageType
         self.category = category
         self.manuallyAdded = manuallyAdded
