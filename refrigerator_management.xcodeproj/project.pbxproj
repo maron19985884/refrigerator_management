@@ -111,8 +111,9 @@
 				9E28B40B2DDD365B008DCE94 /* refrigerator_management */,
 			);
 			name = refrigerator_management;
-			packageProductDependencies = (
-			);
+                        packageProductDependencies = (
+                                9E28B4352DDD365E008DCE94 /* GoogleMobileAds */,
+                        );
 			productName = refrigerator_management;
 			productReference = 9E28B4092DDD365B008DCE94 /* refrigerator_management.app */;
 			productType = "com.apple.product-type.application";
@@ -134,8 +135,9 @@
 				9E28B41A2DDD365D008DCE94 /* refrigerator_managementTests */,
 			);
 			name = refrigerator_managementTests;
-			packageProductDependencies = (
-			);
+                        packageProductDependencies = (
+                                9E28B4352DDD365E008DCE94 /* GoogleMobileAds */,
+                        );
 			productName = refrigerator_managementTests;
 			productReference = 9E28B4172DDD365D008DCE94 /* refrigerator_managementTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -157,8 +159,9 @@
 				9E28B4242DDD365E008DCE94 /* refrigerator_managementUITests */,
 			);
 			name = refrigerator_managementUITests;
-			packageProductDependencies = (
-			);
+                        packageProductDependencies = (
+                                9E28B4352DDD365E008DCE94 /* GoogleMobileAds */,
+                        );
 			productName = refrigerator_managementUITests;
 			productReference = 9E28B4212DDD365E008DCE94 /* refrigerator_managementUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
@@ -196,8 +199,11 @@
 			mainGroup = 9E28B4002DDD365B008DCE94;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = 9E28B40A2DDD365B008DCE94 /* Products */;
-			projectDirPath = "";
+                        productRefGroup = 9E28B40A2DDD365B008DCE94 /* Products */;
+                        packageReferences = (
+                                9E28B4342DDD365E008DCE94 /* swift-package-manager-google-mobile-ads */,
+                        );
+                        projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				9E28B4082DDD365B008DCE94 /* refrigerator_management */,
@@ -267,6 +273,25 @@
 			targetProxy = 9E28B4222DDD365E008DCE94 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+                9E28B4342DDD365E008DCE94 /* swift-package-manager-google-mobile-ads */ = {
+                        isa = XCRemoteSwiftPackageReference;
+                        repositoryURL = "https://github.com/googleads/swift-package-manager-google-mobile-ads.git";
+                        requirement = {
+                                kind = upToNextMajorVersion;
+                                minimumVersion = "11.0.0";
+                        };
+                };
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+                9E28B4352DDD365E008DCE94 /* GoogleMobileAds */ = {
+                        isa = XCSwiftPackageProductDependency;
+                        package = 9E28B4342DDD365E008DCE94 /* swift-package-manager-google-mobile-ads */;
+                        productName = GoogleMobileAds;
+                };
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCBuildConfiguration section */
 		9E28B4292DDD365E008DCE94 /* Debug */ = {
