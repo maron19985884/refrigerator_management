@@ -37,19 +37,19 @@ class TemplateViewModel: ObservableObject {
                 }
             } else {
                 let defaults = Self.defaultTemplates
+                self.saveTemplates(defaults)
                 DispatchQueue.main.async {
                     self.templates = defaults
                 }
-                self.saveTemplates()
             }
         }
     }
 
     // テンプレート保存
-    func saveTemplates() {
-        let items = templates
+    func saveTemplates(_ items: [Template]? = nil) {
+        let templatesToSave = items ?? templates
         DispatchQueue.global(qos: .background).async {
-            if let encoded = try? JSONEncoder().encode(items) {
+            if let encoded = try? JSONEncoder().encode(templatesToSave) {
                 self.userDefaults.set(encoded, forKey: self.storageKey)
             }
         }
