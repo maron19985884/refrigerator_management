@@ -23,15 +23,26 @@ struct ShoppingListView: View {
                         ForEach(shoppingViewModel.shoppingItems) { item in
                             HStack(alignment: .top) {
                                 Button(action: {
-                                    shoppingViewModel.toggleCheck(for: item)
+                                    if editMode == .active {
+                                        if selection.contains(item.id) {
+                                            selection.remove(item.id)
+                                        } else {
+                                            selection.insert(item.id)
+                                        }
+                                    } else {
+                                        shoppingViewModel.toggleCheck(for: item)
+                                    }
                                 }) {
-                                    Image(systemName: item.isChecked ? "checkmark.circle.fill" : "circle")
+                                    Image(systemName: editMode == .active ?
+                                            (selection.contains(item.id) ? "checkmark.circle.fill" : "circle") :
+                                            (item.isChecked ? "checkmark.circle.fill" : "circle"))
                                         .resizable()
                                         .frame(width: 28, height: 28)
-                                        .foregroundColor(item.isChecked ? .green : .gray)
+                                        .foregroundColor(editMode == .active ?
+                                                        (selection.contains(item.id) ? .red : .gray) :
+                                                        (item.isChecked ? .green : .gray))
                                         .padding(.trailing, 8)
                                 }
-                                .disabled(editMode == .active)
 
                                 VStack(alignment: .leading, spacing: 4) {
                                     Text(item.name)
@@ -60,13 +71,23 @@ struct ShoppingListView: View {
                                 .onTapGesture {
                                     if editMode == .inactive {
                                         editingItem = item
+                                    } else {
+                                        if selection.contains(item.id) {
+                                            selection.remove(item.id)
+                                        } else {
+                                            selection.insert(item.id)
+                                        }
                                     }
                                 }
                                 Spacer()
                             }
                             .contentShape(Rectangle())
                             .padding(.vertical, 8)
-                            .background(item.isChecked ? Color.green.opacity(0.15) : Color.clear)
+                            .background(
+                                editMode == .active ?
+                                    (selection.contains(item.id) ? Color.red.opacity(0.15) : Color.clear) :
+                                    (item.isChecked ? Color.green.opacity(0.15) : Color.clear)
+                            )
                             .cornerRadius(8)
                             .swipeActions {
                                 Button(role: .destructive) {
@@ -89,7 +110,10 @@ struct ShoppingListView: View {
                     Spacer()
                     HStack {
                         Button(action: {
-                            withAnimation { editMode = editMode.isEditing ? .inactive : .active }
+                            withAnimation {
+                                editMode = editMode.isEditing ? .inactive : .active
+                                selection.removeAll()
+                            }
                         }) {
                             Image(systemName: editMode.isEditing ? "checkmark.circle.fill" : "pencil.circle.fill")
                                 .resizable()
@@ -107,6 +131,8 @@ struct ShoppingListView: View {
                                 .foregroundColor(.blue)
                                 .padding()
                         }
+                        .disabled(editMode == .active)
+                        .opacity(editMode == .active ? 0.4 : 1.0)
                     }
                 }
             }
