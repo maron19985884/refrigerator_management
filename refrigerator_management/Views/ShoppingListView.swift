@@ -44,6 +44,8 @@ struct ShoppingListView: View {
                                         if let date = item.expirationDate {
                                             Text(dateLabel(for: date))
                                                 .foregroundColor(color(for: date))
+                                        } else if let period = item.expirationPeriod {
+                                            Text("期限: \(period)日")
                                         }
                                     }
                                     .font(.caption)
@@ -55,14 +57,14 @@ struct ShoppingListView: View {
                                             .foregroundColor(.gray)
                                     }
                                 }
+                                .onTapGesture {
+                                    if editMode == .inactive {
+                                        editingItem = item
+                                    }
+                                }
                                 Spacer()
                             }
                             .contentShape(Rectangle())
-                            .onTapGesture {
-                                if editMode == .inactive {
-                                    editingItem = item
-                                }
-                            }
                             .padding(.vertical, 8)
                             .background(item.isChecked ? Color.green.opacity(0.15) : Color.clear)
                             .cornerRadius(8)
@@ -130,43 +132,15 @@ struct ShoppingListView: View {
                 }
             }
             .sheet(item: $editingItem) { item in
-                let foodItem = FoodItem(
-                    id: item.id,
-                    name: item.name,
-                    quantity: item.quantity,
-                    expirationDate: item.expirationDate ?? Date(),
-                    storageType: item.storageType,
-                    category: item.category
-                )
-                FoodRegisterView(itemToEdit: foodItem) { updatedItem in
-                    let updatedShoppingItem = ShoppingItem(
-                        id: updatedItem.id,
-                        name: updatedItem.name,
-                        quantity: updatedItem.quantity,
-                        expirationDate: updatedItem.expirationDate,
-                        storageType: updatedItem.storageType,
-                        category: updatedItem.category,
-                        manuallyAdded: true,
-                        linkedFoodItemID: nil,
-                        note: item.note,
-                        addedAt: item.addedAt,
-                        isChecked: item.isChecked
-                    )
-                    shoppingViewModel.updateItem(updatedShoppingItem)
+                ShoppingItemRegisterView(itemToEdit: item) { updatedItem in
+                    shoppingViewModel.updateItem(updatedItem)
                 }
             }
         }
         .navigationViewStyle(.stack)
         .sheet(isPresented: $showingRegister) {
-            FoodRegisterView { newItem in
-                let shoppingItem = ShoppingItem(
-                    name: newItem.name,
-                    quantity: newItem.quantity,
-                    expirationDate: newItem.expirationDate,
-                    storageType: newItem.storageType,
-                    category: newItem.category
-                )
-                shoppingViewModel.add(shoppingItem)
+            ShoppingItemRegisterView { newItem in
+                shoppingViewModel.add(newItem)
             }
         }
         .alert("テンプレート名を入力", isPresented: $showingTemplateNameAlert) {
@@ -201,7 +175,15 @@ struct ShoppingListView: View {
         for (name, items) in groupedItems {
             let quantity = items.reduce(0) { $0 + ($1.quantity > 0 ? $1.quantity : 1) }
 
-            let expirationDate = items.first?.expirationDate ?? Calendar.current.date(byAdding: .day, value: 7, to: Date())!
+            let first = items.first
+            let expirationDate: Date
+            if let date = first?.expirationDate {
+                expirationDate = date
+            } else if let period = first?.expirationPeriod {
+                expirationDate = Calendar.current.date(byAdding: .day, value: period, to: Date()) ?? Date()
+            } else {
+                expirationDate = Calendar.current.date(byAdding: .day, value: 7, to: Date())!
+            }
             let storageType = items.first?.storageType ?? .fridge
             let category = items.first?.category ?? .other
 
@@ -223,6 +205,7 @@ struct ShoppingListView: View {
                 name: item.name,
                 quantity: item.quantity,
                 expirationDate: item.expirationDate,
+                expirationPeriod: item.expirationPeriod,
                 storageType: item.storageType,
                 category: item.category
             )

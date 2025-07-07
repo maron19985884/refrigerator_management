@@ -8,6 +8,7 @@ struct TemplateItem: Identifiable, Codable, Equatable {
     var name: String
     var quantity: Int
     var expirationDate: Date?
+    var expirationPeriod: Int?
     var storageType: StorageType
     var category: FoodCategory
 
@@ -16,6 +17,7 @@ struct TemplateItem: Identifiable, Codable, Equatable {
         name: String,
         quantity: Int = 1,
         expirationDate: Date? = nil,
+        expirationPeriod: Int? = nil,
         storageType: StorageType = .fridge,
         category: FoodCategory = .other
     ) {
@@ -23,6 +25,7 @@ struct TemplateItem: Identifiable, Codable, Equatable {
         self.name = name
         self.quantity = quantity
         self.expirationDate = expirationDate
+        self.expirationPeriod = expirationPeriod
         self.storageType = storageType
         self.category = category
     }
