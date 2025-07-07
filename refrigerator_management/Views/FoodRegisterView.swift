@@ -46,7 +46,7 @@ struct FoodRegisterView: View {
                             DatePicker("", selection: $expirationDate, displayedComponents: .date)
                                 .datePickerStyle(.graphical)
                                 .labelsHidden()
-                                .onChange(of: expirationDate) { _ in
+                                .onChange(of: expirationDate) { _, _ in
                                     showingDatePicker = false
                                 }
                             Button("閉じる") {

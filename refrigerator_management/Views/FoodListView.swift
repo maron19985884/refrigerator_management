@@ -53,15 +53,15 @@ struct FoodListView: View {
                                 editingItem = item
                             }
                         }
-                    }
-                    .swipeActions {
-                        Button(role: .destructive) {
-                            if let index = filteredItems.firstIndex(where: { $0.id == item.id }) {
-                                deleteOffsets = IndexSet(integer: index)
-                                showingDeleteConfirm = true
+                        .swipeActions {
+                            Button(role: .destructive) {
+                                if let index = filteredItems.firstIndex(where: { $0.id == item.id }) {
+                                    deleteOffsets = IndexSet(integer: index)
+                                    showingDeleteConfirm = true
+                                }
+                            } label: {
+                                Label("削除", systemImage: "trash")
                             }
-                        } label: {
-                            Label("削除", systemImage: "trash")
                         }
                     }
                 }
