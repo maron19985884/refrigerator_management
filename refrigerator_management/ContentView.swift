@@ -12,8 +12,7 @@ struct ContentView: View {
     var body: some View {
         // TabView で在庫・買い物・テンプレートを切り替える
         NavigationStack {
-            ZStack(alignment: .bottom) {
-                TabView {
+            TabView {
                 // 在庫タブ
                 FoodListView(viewModel: foodViewModel)
                     .tabItem {
@@ -38,7 +37,8 @@ struct ContentView: View {
                 .tabItem {
                     Label("テンプレート", systemImage: "list.bullet.rectangle")
                 }
-                }
+            }
+            .safeAreaInset(edge: .bottom) {
                 // 画面下部に常に表示するバナー広告
                 BannerAdView(adUnitID: "ca-app-pub-3940256099942544/2934735716")
                     .frame(width: 320, height: 50)
