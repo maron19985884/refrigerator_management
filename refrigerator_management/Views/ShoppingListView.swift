@@ -167,7 +167,6 @@ struct ShoppingListView: View {
             editMode = .inactive
             selection.removeAll()
         }
-    }
 
     private func processCheckedItems() {
         let checkedItems = shoppingViewModel.extractCheckedItemsAndRemove()
