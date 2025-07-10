@@ -18,8 +18,7 @@ struct FoodListView: View {
 
     var body: some View {
         NavigationView {
-            ZStack {
-                VStack {
+            VStack {
                 Picker("保存場所", selection: $selectedStorage) {
                     ForEach(StorageType.allCases) { type in
                         Text(type.rawValue).tag(type)
@@ -68,32 +67,6 @@ struct FoodListView: View {
                 .environment(\.editMode, $editMode)
                 .listStyle(.insetGrouped)
             }
-
-            // 右下の追加ボタン
-            VStack {
-                Spacer()
-                HStack {
-                    Button(action: {
-                        withAnimation { editMode = editMode.isEditing ? .inactive : .active }
-                    }) {
-                        Image(systemName: editMode.isEditing ? "checkmark.circle.fill" : "pencil.circle.fill")
-                            .resizable()
-                            .frame(width: 60, height: 60)
-                            .foregroundColor(.orange)
-                            .padding()
-                    }
-                    Spacer()
-                    Button(action: {
-                        showingRegister = true
-                    }) {
-                        Image(systemName: "plus.circle.fill")
-                            .resizable()
-                            .frame(width: 60, height: 60)
-                            .foregroundColor(.blue)
-                            .padding()
-                    }
-                }
-            }
         }
         .sheet(isPresented: $showingRegister) {
             FoodRegisterView { newItem in
@@ -108,6 +81,12 @@ struct FoodListView: View {
             }
         }
         .toolbar {
+            ToolbarItemGroup(placement: .navigationBarTrailing) {
+                EditButton()
+                Button(action: { showingRegister = true }) {
+                    Image(systemName: "plus")
+                }
+            }
             ToolbarItem(placement: .navigationBarLeading) {
                 if editMode == .active {
                     Button("削除") {
