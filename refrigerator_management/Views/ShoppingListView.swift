@@ -137,7 +137,6 @@ struct ShoppingListView: View {
                     shoppingViewModel.updateItem(updatedItem)
                 }
             }
-        }
         .navigationViewStyle(.stack)
         .sheet(isPresented: $showingRegister) {
             ShoppingItemRegisterView { newItem in
@@ -167,6 +166,8 @@ struct ShoppingListView: View {
             editMode = .inactive
             selection.removeAll()
         }
+
+    }
 
     private func processCheckedItems() {
         let checkedItems = shoppingViewModel.extractCheckedItemsAndRemove()
