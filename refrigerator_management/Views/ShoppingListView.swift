@@ -17,8 +17,7 @@ struct ShoppingListView: View {
 
     var body: some View {
         NavigationView {
-            ZStack {
-                VStack {
+            VStack {
                     List {
                         ForEach(shoppingViewModel.shoppingItems) { item in
                             HStack(alignment: .top) {
@@ -104,41 +103,11 @@ struct ShoppingListView: View {
                     .environment(\.editMode, $editMode)
                     .listStyle(.insetGrouped)
                 }
-
-                // 編集・在庫追加ボタン
-                VStack {
-                    Spacer()
-                    HStack {
-                        Button(action: {
-                            withAnimation {
-                                editMode = editMode.isEditing ? .inactive : .active
-                                selection.removeAll()
-                            }
-                        }) {
-                            Image(systemName: editMode.isEditing ? "checkmark.circle.fill" : "pencil.circle.fill")
-                                .resizable()
-                                .frame(width: 60, height: 60)
-                                .foregroundColor(.orange)
-                                .padding()
-                        }
-                        Spacer()
-                        Button(action: {
-                            showingCartConfirm = true
-                        }) {
-                            Image(systemName: "cart.fill.badge.plus")
-                                .resizable()
-                                .frame(width: 60, height: 60)
-                                .foregroundColor(.blue)
-                                .padding()
-                        }
-                        .disabled(editMode == .active)
-                        .opacity(editMode == .active ? 0.4 : 1.0)
-                    }
-                }
             }
             .navigationTitle("買い物リスト")
             .toolbar {
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
+                    EditButton()
                     Button(action: { showingRegister = true }) {
                         Image(systemName: "plus")
                     }
@@ -155,6 +124,12 @@ struct ShoppingListView: View {
                             showingTemplateNameAlert = true
                         }
                     }
+                }
+                ToolbarItem(placement: .bottomBar) {
+                    Button(action: { showingCartConfirm = true }) {
+                        Label("在庫へ追加", systemImage: "cart.fill.badge.plus")
+                    }
+                    .disabled(editMode == .active)
                 }
             }
             .sheet(item: $editingItem) { item in
