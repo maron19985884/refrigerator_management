@@ -10,8 +10,8 @@ struct ContentView: View {
     @StateObject private var templateViewModel = TemplateViewModel()
 
     var body: some View {
-        // TabView で在庫・買い物・テンプレートを切り替える
-        NavigationStack {
+        // TabView で在庫・買い物・テンプレートを切り替え、下部に広告を配置
+        VStack(spacing: 0) {
             TabView {
                 // 在庫タブ
                 FoodListView(viewModel: foodViewModel)
@@ -38,11 +38,10 @@ struct ContentView: View {
                     Label("テンプレート", systemImage: "list.bullet.rectangle")
                 }
             }
-            .safeAreaInset(edge: .bottom) {
-                // 画面下部に常に表示するバナー広告
-                BannerAdView(adUnitID: "ca-app-pub-3940256099942544/2934735716")
-                    .frame(width: 320, height: 50)
-            }
+
+            // 画面下部に常に表示するバナー広告
+            BannerAdView(adUnitID: "ca-app-pub-3940256099942544/2934735716")
+                .frame(width: 320, height: 50)
         }
     }
 }
