@@ -6,6 +6,13 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		9E94BAB02E1FE4AA00B17F63 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = 9E28B4352DDD365E008DCE94 /* GoogleMobileAds */; };
+		9E94BAB12E1FE4AA00B17F63 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = 9E28B4352DDD365E008DCE94 /* GoogleMobileAds */; };
+		9E94BAB22E1FE4AA00B17F63 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = 9E28B4352DDD365E008DCE94 /* GoogleMobileAds */; };
+		9E94BAE52E1FE56000B17F63 /* Property List 2.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9E94BAE42E1FE56000B17F63 /* Property List 2.plist */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		9E28B4182DDD365D008DCE94 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -27,6 +34,7 @@
 		9E28B4092DDD365B008DCE94 /* refrigerator_management.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = refrigerator_management.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E28B4172DDD365D008DCE94 /* refrigerator_managementTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = refrigerator_managementTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E28B4212DDD365E008DCE94 /* refrigerator_managementUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = refrigerator_managementUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		9E94BAE42E1FE56000B17F63 /* Property List 2.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Property List 2.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -52,6 +60,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9E94BAB02E1FE4AA00B17F63 /* GoogleMobileAds in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -59,6 +68,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9E94BAB12E1FE4AA00B17F63 /* GoogleMobileAds in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -66,6 +76,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9E94BAB22E1FE4AA00B17F63 /* GoogleMobileAds in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -75,6 +86,7 @@
 		9E28B4002DDD365B008DCE94 = {
 			isa = PBXGroup;
 			children = (
+				9E94BAE42E1FE56000B17F63 /* Property List 2.plist */,
 				9E28B40B2DDD365B008DCE94 /* refrigerator_management */,
 				9E28B41A2DDD365D008DCE94 /* refrigerator_managementTests */,
 				9E28B4242DDD365E008DCE94 /* refrigerator_managementUITests */,
@@ -111,9 +123,9 @@
 				9E28B40B2DDD365B008DCE94 /* refrigerator_management */,
 			);
 			name = refrigerator_management;
-                        packageProductDependencies = (
-                                9E28B4352DDD365E008DCE94 /* GoogleMobileAds */,
-                        );
+			packageProductDependencies = (
+				9E28B4352DDD365E008DCE94 /* GoogleMobileAds */,
+			);
 			productName = refrigerator_management;
 			productReference = 9E28B4092DDD365B008DCE94 /* refrigerator_management.app */;
 			productType = "com.apple.product-type.application";
@@ -135,9 +147,9 @@
 				9E28B41A2DDD365D008DCE94 /* refrigerator_managementTests */,
 			);
 			name = refrigerator_managementTests;
-                        packageProductDependencies = (
-                                9E28B4352DDD365E008DCE94 /* GoogleMobileAds */,
-                        );
+			packageProductDependencies = (
+				9E28B4352DDD365E008DCE94 /* GoogleMobileAds */,
+			);
 			productName = refrigerator_managementTests;
 			productReference = 9E28B4172DDD365D008DCE94 /* refrigerator_managementTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -159,9 +171,9 @@
 				9E28B4242DDD365E008DCE94 /* refrigerator_managementUITests */,
 			);
 			name = refrigerator_managementUITests;
-                        packageProductDependencies = (
-                                9E28B4352DDD365E008DCE94 /* GoogleMobileAds */,
-                        );
+			packageProductDependencies = (
+				9E28B4352DDD365E008DCE94 /* GoogleMobileAds */,
+			);
 			productName = refrigerator_managementUITests;
 			productReference = 9E28B4212DDD365E008DCE94 /* refrigerator_managementUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
@@ -198,12 +210,12 @@
 			);
 			mainGroup = 9E28B4002DDD365B008DCE94;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				9E28B4342DDD365E008DCE94 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
+			);
 			preferredProjectObjectVersion = 77;
-                        productRefGroup = 9E28B40A2DDD365B008DCE94 /* Products */;
-                        packageReferences = (
-                                9E28B4342DDD365E008DCE94 /* swift-package-manager-google-mobile-ads */,
-                        );
-                        projectDirPath = "";
+			productRefGroup = 9E28B40A2DDD365B008DCE94 /* Products */;
+			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				9E28B4082DDD365B008DCE94 /* refrigerator_management */,
@@ -218,6 +230,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9E94BAE52E1FE56000B17F63 /* Property List 2.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -273,25 +286,6 @@
 			targetProxy = 9E28B4222DDD365E008DCE94 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-                9E28B4342DDD365E008DCE94 /* swift-package-manager-google-mobile-ads */ = {
-                        isa = XCRemoteSwiftPackageReference;
-                        repositoryURL = "https://github.com/googleads/swift-package-manager-google-mobile-ads.git";
-                        requirement = {
-                                kind = upToNextMajorVersion;
-                                minimumVersion = "11.0.0";
-                        };
-                };
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-                9E28B4352DDD365E008DCE94 /* GoogleMobileAds */ = {
-                        isa = XCSwiftPackageProductDependency;
-                        package = 9E28B4342DDD365E008DCE94 /* swift-package-manager-google-mobile-ads */;
-                        productName = GoogleMobileAds;
-                };
-/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCBuildConfiguration section */
 		9E28B4292DDD365E008DCE94 /* Debug */ = {
@@ -432,7 +426,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-                            IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.4;
@@ -618,6 +612,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		9E28B4342DDD365E008DCE94 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googleads/swift-package-manager-google-mobile-ads.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		9E28B4352DDD365E008DCE94 /* GoogleMobileAds */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9E28B4342DDD365E008DCE94 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;
+			productName = GoogleMobileAds;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 9E28B4012DDD365B008DCE94 /* Project object */;
 }
