@@ -109,7 +109,8 @@ struct FoodListView: View {
         }
         .navigationTitle("食材一覧")
     }
-}
+
+    // MARK: - Private Methods
 
     private func performDelete() {
         if let offsets = deleteOffsets {
