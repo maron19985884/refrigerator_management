@@ -101,6 +101,11 @@ struct FoodListView: View {
         }
       }
     }
+    .overlay(alignment: .bottom) {
+      if editMode == .active {
+        bottomBar
+      }
+    }
     .sheet(isPresented: $showingRegister) {
       FoodRegisterView { newItem in
         viewModel.add(item: newItem)
@@ -120,19 +125,7 @@ struct FoodListView: View {
           Image(systemName: "plus")
         }
       }
-      ToolbarItemGroup(placement: .bottomBar) {
-        if editMode == .active {
-          Button(role: .destructive) {
-            deleteOffsets = nil
-            showingDeleteConfirm = true
-          } label: {
-            Label("削除", systemImage: "trash")
-          }
-          .disabled(selection.isEmpty)
-        }
-      }
     }
-    .toolbarBackground(.visible, for: .bottomBar)
     .alert("選択した項目を削除しますか？", isPresented: $showingDeleteConfirm) {
       Button("キャンセル", role: .cancel) {}
       Button("削除", role: .destructive) {
@@ -172,5 +165,21 @@ struct FoodListView: View {
 
   func dateLabel(for date: Date) -> String {
     DateUtils.label(for: date)
+  }
+
+  private var bottomBar: some View {
+    HStack {
+      Button(role: .destructive) {
+        deleteOffsets = nil
+        showingDeleteConfirm = true
+      } label: {
+        Label("削除", systemImage: "trash")
+      }
+      .disabled(selection.isEmpty)
+      Spacer()
+    }
+    .frame(maxWidth: .infinity)
+    .padding()
+    .background(.bar)
   }
 }
