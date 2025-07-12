@@ -46,6 +46,7 @@ struct ShoppingListView: View {
                                                         (item.isChecked ? .green : .gray))
                                         .padding(.trailing, 8)
                                 }
+                                .buttonStyle(.borderless)
 
                                 VStack(alignment: .leading, spacing: 4) {
                                     Text(item.name)
@@ -121,19 +122,23 @@ struct ShoppingListView: View {
                     }
                 }
                 ToolbarItem(placement: .navigationBarLeading) {
-                    if editMode == .active {
-                        Button("削除") {
-                            deleteOffsets = nil
-                            showingDeleteConfirm = true
-                        }.disabled(selection.isEmpty)
-                    } else {
+                    if editMode == .inactive {
                         Button("テンプレート保存") {
                             newTemplateName = ""
                             showingTemplateNameAlert = true
                         }
                     }
                 }
-                ToolbarItem(placement: .bottomBar) {
+                ToolbarItemGroup(placement: .bottomBar) {
+                    if editMode == .active {
+                        Button(role: .destructive) {
+                            deleteOffsets = nil
+                            showingDeleteConfirm = true
+                        } label: {
+                            Label("削除", systemImage: "trash")
+                        }
+                        .disabled(selection.isEmpty)
+                    }
                     Button(action: { showingCartConfirm = true }) {
                         Label("在庫へ追加", systemImage: "cart.fill.badge.plus")
                     }

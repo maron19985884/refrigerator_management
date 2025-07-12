@@ -66,6 +66,9 @@ struct FoodListView: View {
                 }
                 .environment(\.editMode, $editMode)
                 .listStyle(.insetGrouped)
+                .safeAreaInset(edge: .bottom) {
+                    Spacer().frame(height: 94)
+                }
             }
         }
         .sheet(isPresented: $showingRegister) {
@@ -87,11 +90,13 @@ struct FoodListView: View {
                     Image(systemName: "plus")
                 }
             }
-            ToolbarItem(placement: .navigationBarLeading) {
+            ToolbarItemGroup(placement: .bottomBar) {
                 if editMode == .active {
-                    Button("削除") {
+                    Button(role: .destructive) {
                         deleteOffsets = nil
                         showingDeleteConfirm = true
+                    } label: {
+                        Label("削除", systemImage: "trash")
                     }
                     .disabled(selection.isEmpty)
                 }

@@ -53,9 +53,12 @@ struct TemplateListView: View {
                 }
             }
             .listStyle(.insetGrouped)
+            .safeAreaInset(edge: .bottom) {
+                Spacer().frame(height: 94)
+            }
             .navigationTitle("買い物テンプレート")
             .toolbar {
-                ToolbarItemGroup(placement: .navigationBarTrailing) {
+                ToolbarItemGroup(placement: .bottomBar) {
                     EditButton()
                     Button(action: {
                         let new = Template(name: "新規テンプレート", items: [])
