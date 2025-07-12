@@ -22,7 +22,11 @@ struct ShoppingListView: View {
         NavigationView {
             VStack {
                     List {
-                        ForEach(shoppingViewModel.shoppingItems) { item in
+                        ForEach(
+                            shoppingViewModel.shoppingItems
+                                .sorted { $0.addedAt < $1.addedAt },
+                            id: \.id
+                        ) { item in
                             HStack(alignment: .top) {
                                 Button(action: {
                                     if editMode == .active {
