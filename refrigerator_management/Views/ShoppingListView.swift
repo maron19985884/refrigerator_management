@@ -15,9 +15,6 @@ struct ShoppingListView: View {
     @State private var deleteOffsets: IndexSet? = nil
     @State private var showingCartConfirm = false
 
-    /// 端末のセーフエリアを取得
-    @Environment(\.safeAreaInsets) private var safeAreaInsets
-
     var body: some View {
         NavigationView {
             VStack {
@@ -110,7 +107,9 @@ struct ShoppingListView: View {
                     .environment(\.editMode, $editMode)
                     .listStyle(.insetGrouped)
                     // ボトムバーと重ならないように下部へ余白を追加
-                    .padding(.bottom, safeAreaInsets.bottom + 44)
+                    .safeAreaInset(edge: .bottom) {
+                        Spacer().frame(height: 44)
+                    }
                 }
             }
             .navigationTitle("買い物リスト")
