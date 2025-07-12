@@ -17,8 +17,7 @@ struct ShoppingListView: View {
 
   var body: some View {
     NavigationView {
-      VStack {
-        List {
+      List {
           ForEach(
             shoppingViewModel.shoppingItems
               .sorted { $0.addedAt < $1.addedAt },
@@ -119,6 +118,9 @@ struct ShoppingListView: View {
         }
       }
     }
+    .overlay(alignment: .bottom) {
+      bottomBar
+    }
     .navigationTitle("買い物リスト")
     .toolbar {
       ToolbarItemGroup(placement: .navigationBarTrailing) {
@@ -135,23 +137,7 @@ struct ShoppingListView: View {
           }
         }
       }
-      ToolbarItemGroup(placement: .bottomBar) {
-        if editMode == .active {
-          Button(role: .destructive) {
-            deleteOffsets = nil
-            showingDeleteConfirm = true
-          } label: {
-            Label("削除", systemImage: "trash")
-          }
-          .disabled(selection.isEmpty)
-        }
-        Button(action: { showingCartConfirm = true }) {
-          Label("在庫へ追加", systemImage: "cart.fill.badge.plus")
-        }
-        .disabled(editMode == .active)
-      }
     }
-    .toolbarBackground(.visible, for: .bottomBar)
     .sheet(item: $editingItem) { item in
       ShoppingItemRegisterView(itemToEdit: item) { updatedItem in
         shoppingViewModel.updateItem(updatedItem)
@@ -258,5 +244,27 @@ struct ShoppingListView: View {
 
   private func dateLabel(for date: Date) -> String {
     DateUtils.label(for: date)
+  }
+
+  private var bottomBar: some View {
+    HStack {
+      if editMode == .active {
+        Button(role: .destructive) {
+          deleteOffsets = nil
+          showingDeleteConfirm = true
+        } label: {
+          Label("削除", systemImage: "trash")
+        }
+        .disabled(selection.isEmpty)
+      }
+      Spacer()
+      Button(action: { showingCartConfirm = true }) {
+        Label("在庫へ追加", systemImage: "cart.fill.badge.plus")
+      }
+      .disabled(editMode == .active)
+    }
+    .padding()
+    .frame(maxWidth: .infinity)
+    .background(.bar)
   }
 }
