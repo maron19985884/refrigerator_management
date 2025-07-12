@@ -108,7 +108,7 @@ struct ShoppingListView: View {
                     .listStyle(.insetGrouped)
                     // ボトムバーと重ならないように下部へ余白を追加
                     .safeAreaInset(edge: .bottom) {
-                        Spacer().frame(height: 44)
+                        Spacer().frame(height: 94)
                     }
                 }
             }

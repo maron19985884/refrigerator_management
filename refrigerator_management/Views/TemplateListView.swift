@@ -54,6 +54,19 @@ struct TemplateListView: View {
             }
             .listStyle(.insetGrouped)
             .navigationTitle("買い物テンプレート")
+            .toolbar {
+                ToolbarItemGroup(placement: .navigationBarTrailing) {
+                    EditButton()
+                    Button(action: {
+                        let new = Template(name: "新規テンプレート", items: [])
+                        templateViewModel.templates.append(new)
+                        editingIndex = templateViewModel.templates.count - 1
+                        showingEditSheet = true
+                    }) {
+                        Image(systemName: "plus")
+                    }
+                }
+            }
         }
         .alert("このテンプレートを買い物リストに反映しますか？", isPresented: $showingConfirm, presenting: templateToApply) { template in
             Button("キャンセル", role: .cancel) {}
