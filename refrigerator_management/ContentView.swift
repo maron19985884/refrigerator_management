@@ -8,8 +8,6 @@ struct ContentView: View {
     @StateObject private var shoppingViewModel = ShoppingViewModel()
     /// テンプレートを管理する ViewModel
     @StateObject private var templateViewModel = TemplateViewModel()
-    /// ゲーム結果画面の表示状態
-    @State private var showingResult = false
 
     var body: some View {
         // TabView で在庫・買い物・テンプレートを切り替え、下部に広告を配置
@@ -40,20 +38,13 @@ struct ContentView: View {
                     Label("テンプレート", systemImage: "list.bullet.rectangle")
                 }
             }
+            .padding(.bottom, 50)
 
-            // サンプルとしてゲームオーバー画面を開くボタン
-            Button("ゲーム終了") {
-                showingResult = true
-            }
-            .padding(.vertical)
+
 
             // 画面下部に常に表示するバナー広告
             AdMobBannerView(adUnitID: "ca-app-pub-3940256099942544/2934735716")
                 .frame(width: 320, height: 50)
-        }
-        // ゲーム終了時に表示する画面
-        .sheet(isPresented: $showingResult) {
-            ResultView()
         }
         // アプリ起動時にインタースティシャル広告を事前読み込み
         .onAppear {
