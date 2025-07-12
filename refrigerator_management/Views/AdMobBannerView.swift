@@ -7,7 +7,7 @@ struct AdMobBannerView: UIViewRepresentable {
     let adUnitID: String
 
     func makeUIView(context: Context) -> GADBannerView {
-        let banner = GADBannerView(adSize: .banner)
+        let banner = GADBannerView(adSize: GADAdSizeBanner)
         banner.adUnitID = adUnitID
         banner.rootViewController = UIApplication.shared.connectedScenes
             .compactMap { ($0 as? UIWindowScene)?.keyWindow?.rootViewController }
