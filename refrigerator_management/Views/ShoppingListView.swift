@@ -173,8 +173,6 @@ struct ShoppingListView: View {
       selection.removeAll()
     }
 
-  }
-
   private func processCheckedItems() {
     let checkedItems = shoppingViewModel.extractCheckedItemsAndRemove()
     let groupedItems = Dictionary(grouping: checkedItems, by: { $0.name })
