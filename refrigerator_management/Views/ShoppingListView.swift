@@ -18,132 +18,129 @@ struct ShoppingListView: View {
   var body: some View {
     NavigationView {
       List {
-          ForEach(
-            shoppingViewModel.shoppingItems
-              .sorted { $0.addedAt < $1.addedAt },
-            id: \.id
-          ) { item in
-            HStack(alignment: .top) {
-              Button(action: {
-                if editMode == .active {
-                  if selection.contains(item.id) {
-                    selection.remove(item.id)
-                  } else {
-                    selection.insert(item.id)
-                  }
+        ForEach(
+          shoppingViewModel.shoppingItems.sorted { $0.addedAt < $1.addedAt },
+          id: \.id
+        ) { item in
+          HStack(alignment: .top) {
+            Button(action: {
+              if editMode == .active {
+                if selection.contains(item.id) {
+                  selection.remove(item.id)
                 } else {
-                  shoppingViewModel.toggleCheck(for: item)
+                  selection.insert(item.id)
                 }
+              } else {
+                shoppingViewModel.toggleCheck(for: item)
+              }
+            }) {
+              Image(
+                systemName: editMode == .active
+                  ? (selection.contains(item.id) ? "checkmark.circle.fill" : "circle")
+                  : (item.isChecked ? "checkmark.circle.fill" : "circle")
+              )
+              .resizable()
+              .frame(width: 28, height: 28)
+              .foregroundColor(
+                editMode == .active
+                  ? (selection.contains(item.id) ? .red : .gray)
+                  : (item.isChecked ? .green : .gray)
+              )
+              .padding(.trailing, 8)
+            }
+            .buttonStyle(.borderless)
+
+            VStack(alignment: .leading, spacing: 4) {
+              Text(item.name)
+                .font(.headline)
+                .strikethrough(item.isChecked)
+
+              HStack(spacing: 8) {
+                Text("x\(item.quantity)")
+                Text(item.category.rawValue)
+                if let date = item.expirationDate {
+                  Text(dateLabel(for: date))
+                    .foregroundColor(color(for: date))
+                } else if let period = item.expirationPeriod {
+                  Text("期限: \(period)日")
+                }
+              }
+              .font(.caption)
+              .foregroundColor(.gray)
+
+              if let note = item.note, !note.isEmpty {
+                Text(note)
+                  .font(.caption)
+                  .foregroundColor(.gray)
+              }
+            }
+            .onTapGesture {
+              if editMode == .inactive {
+                editingItem = item
+              } else {
+                if selection.contains(item.id) {
+                  selection.remove(item.id)
+                } else {
+                  selection.insert(item.id)
+                }
+              }
+            }
+            Spacer()
+          }
+          .contentShape(Rectangle())
+          .padding(.vertical, 8)
+          .background(
+            editMode == .active
+              ? (selection.contains(item.id) ? Color.red.opacity(0.15) : Color.clear)
+              : (item.isChecked ? Color.green.opacity(0.15) : Color.clear)
+          )
+          .cornerRadius(8)
+          .swipeActions {
+            Button(role: .destructive) {
+              if let index = shoppingViewModel.shoppingItems.firstIndex(where: {
+                $0.id == item.id
               }) {
-                Image(
-                  systemName: editMode == .active
-                    ? (selection.contains(item.id) ? "checkmark.circle.fill" : "circle")
-                    : (item.isChecked ? "checkmark.circle.fill" : "circle")
-                )
-                .resizable()
-                .frame(width: 28, height: 28)
-                .foregroundColor(
-                  editMode == .active
-                    ? (selection.contains(item.id) ? .red : .gray)
-                    : (item.isChecked ? .green : .gray)
-                )
-                .padding(.trailing, 8)
+                deleteOffsets = IndexSet(integer: index)
+                showingDeleteConfirm = true
               }
-              .buttonStyle(.borderless)
-
-              VStack(alignment: .leading, spacing: 4) {
-                Text(item.name)
-                  .font(.headline)
-                  .strikethrough(item.isChecked)
-
-                HStack(spacing: 8) {
-                  Text("x\(item.quantity)")
-                  Text(item.category.rawValue)
-                  if let date = item.expirationDate {
-                    Text(dateLabel(for: date))
-                      .foregroundColor(color(for: date))
-                  } else if let period = item.expirationPeriod {
-                    Text("期限: \(period)日")
-                  }
-                }
-                .font(.caption)
-                .foregroundColor(.gray)
-
-                if let note = item.note, !note.isEmpty {
-                  Text(note)
-                    .font(.caption)
-                    .foregroundColor(.gray)
-                }
-              }
-              .onTapGesture {
-                if editMode == .inactive {
-                  editingItem = item
-                } else {
-                  if selection.contains(item.id) {
-                    selection.remove(item.id)
-                  } else {
-                    selection.insert(item.id)
-                  }
-                }
-              }
-              Spacer()
-            }
-            .contentShape(Rectangle())
-            .padding(.vertical, 8)
-            .background(
-              editMode == .active
-                ? (selection.contains(item.id) ? Color.red.opacity(0.15) : Color.clear)
-                : (item.isChecked ? Color.green.opacity(0.15) : Color.clear)
-            )
-            .cornerRadius(8)
-            .swipeActions {
-              Button(role: .destructive) {
-                if let index = shoppingViewModel.shoppingItems.firstIndex(where: {
-                  $0.id == item.id
-                }) {
-                  deleteOffsets = IndexSet(integer: index)
-                  showingDeleteConfirm = true
-                }
-              } label: {
-                Label("削除", systemImage: "trash")
-              }
+            } label: {
+              Label("削除", systemImage: "trash")
             }
           }
         }
-        .environment(\.editMode, $editMode)
-        .listStyle(.insetGrouped)
-        // ボトムバーと重ならないように下部へ余白を追加
-        .safeAreaInset(edge: .bottom) {
-          Spacer().frame(height: 94)
-        }
       }
-    }
-    .overlay(alignment: .bottom) {
-      bottomBar
-    }
-    .navigationTitle("買い物リスト")
-    .toolbar {
-      ToolbarItemGroup(placement: .navigationBarTrailing) {
-        EditButton()
-        Button(action: { showingRegister = true }) {
-          Image(systemName: "plus")
-        }
+      .environment(\.editMode, $editMode)
+      .listStyle(.insetGrouped)
+      .safeAreaInset(edge: .bottom) {
+        Spacer().frame(height: 94)
       }
-      ToolbarItem(placement: .navigationBarLeading) {
-        if editMode == .inactive {
-          Button("テンプレート保存") {
-            newTemplateName = ""
-            showingTemplateNameAlert = true
+      .navigationTitle("買い物リスト")
+      .toolbar {
+        ToolbarItemGroup(placement: .navigationBarTrailing) {
+          EditButton()
+          Button(action: { showingRegister = true }) {
+            Image(systemName: "plus")
+          }
+        }
+        ToolbarItem(placement: .navigationBarLeading) {
+          if editMode == .inactive {
+            Button("テンプレート保存") {
+              newTemplateName = ""
+              showingTemplateNameAlert = true
+            }
           }
         }
       }
+      .overlay(alignment: .bottom) {
+        bottomBar
+      }
     }
+    .navigationViewStyle(.stack)
     .sheet(item: $editingItem) { item in
       ShoppingItemRegisterView(itemToEdit: item) { updatedItem in
         shoppingViewModel.updateItem(updatedItem)
       }
     }
-    .navigationViewStyle(.stack)
     .sheet(isPresented: $showingRegister) {
       ShoppingItemRegisterView { newItem in
         shoppingViewModel.add(newItem)
@@ -172,6 +169,7 @@ struct ShoppingListView: View {
       editMode = .inactive
       selection.removeAll()
     }
+  }
 
   private func processCheckedItems() {
     let checkedItems = shoppingViewModel.extractCheckedItemsAndRemove()
