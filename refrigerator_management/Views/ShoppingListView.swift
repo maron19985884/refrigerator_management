@@ -245,13 +245,10 @@ struct ShoppingListView: View {
   private var bottomBar: some View {
     HStack {
       if editMode == .active {
-        Button(role: .destructive) {
+        BatchDeleteBar(selectionIsEmpty: selection.isEmpty) {
           deleteOffsets = nil
           showingDeleteConfirm = true
-        } label: {
-          Label("削除", systemImage: "trash")
         }
-        .disabled(selection.isEmpty)
       }
       Spacer()
       Button(action: { showingCartConfirm = true }) {

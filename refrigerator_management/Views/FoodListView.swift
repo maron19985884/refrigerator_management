@@ -168,18 +168,9 @@ struct FoodListView: View {
   }
 
   private var bottomBar: some View {
-    HStack {
-      Button(role: .destructive) {
-        deleteOffsets = nil
-        showingDeleteConfirm = true
-      } label: {
-        Label("削除", systemImage: "trash")
-      }
-      .disabled(selection.isEmpty)
-      Spacer()
+    BatchDeleteBar(selectionIsEmpty: selection.isEmpty) {
+      deleteOffsets = nil
+      showingDeleteConfirm = true
     }
-    .frame(maxWidth: .infinity)
-    .padding()
-    .background(.bar)
   }
 }
