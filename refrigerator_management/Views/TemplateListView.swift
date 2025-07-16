@@ -1,6 +1,3 @@
-// TemplateListView.swift
-// テンプレート一覧から買い物リストへ追加する画面
-
 import SwiftUI
 
 struct TemplateListView: View {
@@ -11,8 +8,6 @@ struct TemplateListView: View {
     @State private var showingConfirm = false
     @State private var editingIndex: Int? = nil
     @State private var showingEditSheet = false
-    @State private var deleteIndexSet: IndexSet? = nil
-    @State private var showingDeleteConfirm = false
 
     var body: some View {
         NavigationView {
@@ -47,30 +42,17 @@ struct TemplateListView: View {
                         showingConfirm = true
                     }
                 }
-                .onDelete { indexSet in
-                    deleteIndexSet = indexSet
-                    showingDeleteConfirm = true
-                }
             }
             .listStyle(.insetGrouped)
             .safeAreaInset(edge: .bottom) {
                 Spacer().frame(height: 94)
             }
             .navigationTitle("買い物テンプレート")
-            .toolbar {
-                ToolbarItemGroup(placement: .bottomBar) {
-                    EditButton()
-                    Button(action: {
-                        let new = Template(name: "新規テンプレート", items: [])
-                        templateViewModel.templates.append(new)
-                        editingIndex = templateViewModel.templates.count - 1
-                        showingEditSheet = true
-                    }) {
-                        Image(systemName: "plus")
-                    }
-                }
+            .overlay(alignment: .bottom) {
+                bottomBar
             }
         }
+        .navigationViewStyle(.stack)
         .alert("このテンプレートを買い物リストに反映しますか？", isPresented: $showingConfirm, presenting: templateToApply) { template in
             Button("キャンセル", role: .cancel) {}
             Button("追加") {
@@ -87,20 +69,8 @@ struct TemplateListView: View {
                 }
             }
         }
-        .alert("テンプレートを削除しますか？", isPresented: $showingDeleteConfirm) {
-            Button("キャンセル", role: .cancel) {}
-            Button("削除", role: .destructive) {
-                if let set = deleteIndexSet {
-                    set.forEach { index in
-                        templateViewModel.deleteTemplate(at: index)
-                    }
-                    deleteIndexSet = nil
-                }
-            }
-        }
     }
 
-    // テンプレートを買い物リストに反映（重複時は数量加算）
     private func addTemplateToShoppingList(_ template: Template) {
         for item in template.items {
             if let index = shoppingViewModel.shoppingItems.firstIndex(where: { $0.name == item.name }) {
@@ -122,5 +92,22 @@ struct TemplateListView: View {
             }
         }
         shoppingViewModel.save()
+    }
+
+    private var bottomBar: some View {
+        HStack {
+            Spacer()
+            Button(action: {
+                let new = Template(name: "新規テンプレート", items: [])
+                templateViewModel.templates.append(new)
+                editingIndex = templateViewModel.templates.count - 1
+                showingEditSheet = true
+            }) {
+                Label("追加", systemImage: "plus")
+            }
+            Spacer()
+        }
+        .padding()
+        .background(.bar)
     }
 }

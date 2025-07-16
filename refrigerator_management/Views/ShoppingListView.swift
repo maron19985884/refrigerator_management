@@ -9,10 +9,6 @@ struct ShoppingListView: View {
   @State private var showingRegister = false
   @State private var showingTemplateNameAlert = false
   @State private var newTemplateName: String = ""
-  @State private var editMode: EditMode = .inactive
-  @State private var selection = Set<UUID>()
-  @State private var showingDeleteConfirm = false
-  @State private var deleteOffsets: IndexSet? = nil
   @State private var showingCartConfirm = false
 
   var body: some View {
@@ -24,29 +20,13 @@ struct ShoppingListView: View {
         ) { item in
           HStack(alignment: .top) {
             Button(action: {
-              if editMode == .active {
-                if selection.contains(item.id) {
-                  selection.remove(item.id)
-                } else {
-                  selection.insert(item.id)
-                }
-              } else {
-                shoppingViewModel.toggleCheck(for: item)
-              }
+              shoppingViewModel.toggleCheck(for: item)
             }) {
-              Image(
-                systemName: editMode == .active
-                  ? (selection.contains(item.id) ? "checkmark.circle.fill" : "circle")
-                  : (item.isChecked ? "checkmark.circle.fill" : "circle")
-              )
-              .resizable()
-              .frame(width: 28, height: 28)
-              .foregroundColor(
-                editMode == .active
-                  ? (selection.contains(item.id) ? .red : .gray)
-                  : (item.isChecked ? .green : .gray)
-              )
-              .padding(.trailing, 8)
+              Image(systemName: item.isChecked ? "checkmark.circle.fill" : "circle")
+                .resizable()
+                .frame(width: 28, height: 28)
+                .foregroundColor(item.isChecked ? .green : .gray)
+                .padding(.trailing, 8)
             }
             .buttonStyle(.borderless)
 
@@ -75,33 +55,21 @@ struct ShoppingListView: View {
               }
             }
             .onTapGesture {
-              if editMode == .inactive {
-                editingItem = item
-              } else {
-                if selection.contains(item.id) {
-                  selection.remove(item.id)
-                } else {
-                  selection.insert(item.id)
-                }
-              }
+              editingItem = item
             }
             Spacer()
           }
           .contentShape(Rectangle())
           .padding(.vertical, 8)
-          .background(
-            editMode == .active
-              ? (selection.contains(item.id) ? Color.red.opacity(0.15) : Color.clear)
-              : (item.isChecked ? Color.green.opacity(0.15) : Color.clear)
-          )
+          .background(item.isChecked ? Color.green.opacity(0.15) : Color.clear)
           .cornerRadius(8)
           .swipeActions {
             Button(role: .destructive) {
               if let index = shoppingViewModel.shoppingItems.firstIndex(where: {
                 $0.id == item.id
               }) {
-                deleteOffsets = IndexSet(integer: index)
-                showingDeleteConfirm = true
+                shoppingViewModel.shoppingItems.remove(at: index)
+                shoppingViewModel.save()
               }
             } label: {
               Label("削除", systemImage: "trash")
@@ -109,28 +77,11 @@ struct ShoppingListView: View {
           }
         }
       }
-      .environment(\.editMode, $editMode)
       .listStyle(.insetGrouped)
       .safeAreaInset(edge: .bottom) {
         Spacer().frame(height: 94)
       }
       .navigationTitle("買い物リスト")
-      .toolbar {
-        ToolbarItemGroup(placement: .navigationBarTrailing) {
-          EditButton()
-          Button(action: { showingRegister = true }) {
-            Image(systemName: "plus")
-          }
-        }
-        ToolbarItem(placement: .navigationBarLeading) {
-          if editMode == .inactive {
-            Button("テンプレート保存") {
-              newTemplateName = ""
-              showingTemplateNameAlert = true
-            }
-          }
-        }
-      }
       .overlay(alignment: .bottom) {
         bottomBar
       }
@@ -153,21 +104,11 @@ struct ShoppingListView: View {
       }
       Button("キャンセル", role: .cancel) {}
     }
-    .alert("選択した項目を削除しますか？", isPresented: $showingDeleteConfirm) {
-      Button("キャンセル", role: .cancel) {}
-      Button("削除", role: .destructive) {
-        performDelete()
-      }
-    }
     .alert("チェック済みの項目を食材一覧に移動しますか？", isPresented: $showingCartConfirm) {
       Button("キャンセル", role: .cancel) {}
       Button("移動", role: .destructive) {
         processCheckedItems()
       }
-    }
-    .onDisappear {
-      editMode = .inactive
-      selection.removeAll()
     }
   }
 
@@ -219,21 +160,6 @@ struct ShoppingListView: View {
     showingTemplateNameAlert = false
   }
 
-  private func performDelete() {
-    if let offsets = deleteOffsets {
-      shoppingViewModel.shoppingItems.remove(atOffsets: offsets)
-      deleteOffsets = nil
-      selection.removeAll()
-    } else {
-      shoppingViewModel.shoppingItems.removeAll { item in
-        selection.contains(item.id)
-      }
-      selection.removeAll()
-    }
-    editMode = .inactive
-    shoppingViewModel.save()
-  }
-
   private func color(for date: Date) -> Color {
     DateUtils.color(for: date)
   }
@@ -243,18 +169,25 @@ struct ShoppingListView: View {
   }
 
   private var bottomBar: some View {
-    HStack {
-      if editMode == .active {
-        BatchDeleteBar(selectionIsEmpty: selection.isEmpty) {
-          deleteOffsets = nil
-          showingDeleteConfirm = true
-        }
+    HStack(spacing: 24) {
+      Button(action: {
+        showingRegister = true
+      }) {
+        Label("追加", systemImage: "plus")
       }
-      Spacer()
-      Button(action: { showingCartConfirm = true }) {
+
+      Button(action: {
+        newTemplateName = ""
+        showingTemplateNameAlert = true
+      }) {
+        Label("テンプレート保存", systemImage: "square.and.arrow.down")
+      }
+
+      Button(action: {
+        showingCartConfirm = true
+      }) {
         Label("在庫へ追加", systemImage: "cart.fill.badge.plus")
       }
-      .disabled(editMode == .active)
     }
     .padding()
     .frame(maxWidth: .infinity)
