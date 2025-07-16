@@ -21,9 +21,13 @@ struct TemplateListView: View {
                                 .bold()
                                 .underline()
                             ForEach(template.items) { item in
-                                Text("\(item.name) × \(item.quantity)")
-                                    .font(.caption)
-                                    .foregroundColor(.gray)
+                                HStack(spacing: 4) {
+                                    Text(item.storageType.icon)
+                                    Text(item.category.icon)
+                                    Text("\(item.name) × \(item.quantity)")
+                                }
+                                .font(.caption)
+                                .foregroundColor(.gray)
                             }
                         }
                         Spacer()
@@ -99,7 +103,9 @@ struct TemplateListView: View {
             Spacer()
             Button(action: {
                 let new = Template(name: "新規テンプレート", items: [])
-                templateViewModel.templates.append(new)
+                withAnimation {
+                    templateViewModel.templates.append(new)
+                }
                 editingIndex = templateViewModel.templates.count - 1
                 showingEditSheet = true
             }) {

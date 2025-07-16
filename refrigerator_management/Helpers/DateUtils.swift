@@ -12,7 +12,9 @@ struct DateUtils {
         let today = calendar.startOfDay(for: Date())
         if date < today {
             return .red
-        } else if calendar.isDateInTomorrow(date) {
+        } else if calendar.isDate(date, equalTo: today, toGranularity: .day) || calendar.isDateInTomorrow(date) {
+            return .orange
+        } else if isExpiringSoon(date) {
             return .orange
         } else {
             return .gray
@@ -30,5 +32,12 @@ struct DateUtils {
         } else {
             return "期限: \(dateFormatter.string(from: date))"
         }
+    }
+
+    /// 3日以内に期限が来るかを判定
+    static func isExpiringSoon(_ date: Date) -> Bool {
+        let calendar = Calendar.current
+        guard let limit = calendar.date(byAdding: .day, value: 3, to: Date()) else { return false }
+        return date <= limit
     }
 }
