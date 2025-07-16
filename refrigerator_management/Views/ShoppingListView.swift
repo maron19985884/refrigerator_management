@@ -18,22 +18,29 @@ struct ShoppingListView: View {
           shoppingViewModel.shoppingItems.sorted { $0.addedAt < $1.addedAt },
           id: \.id
         ) { item in
-          HStack(alignment: .top) {
+          HStack(alignment: .top, spacing: 12) {
             Button(action: {
-              shoppingViewModel.toggleCheck(for: item)
+              withAnimation {
+                shoppingViewModel.toggleCheck(for: item)
+              }
             }) {
               Image(systemName: item.isChecked ? "checkmark.circle.fill" : "circle")
                 .resizable()
                 .frame(width: 28, height: 28)
                 .foregroundColor(item.isChecked ? .green : .gray)
-                .padding(.trailing, 8)
             }
             .buttonStyle(.borderless)
 
+            Text(item.storageType.icon)
+              .font(.title3)
+
             VStack(alignment: .leading, spacing: 4) {
-              Text(item.name)
-                .font(.headline)
-                .strikethrough(item.isChecked)
+              HStack {
+                Text(item.name)
+                  .font(.headline)
+                  .strikethrough(item.isChecked)
+                Text(item.category.icon)
+              }
 
               HStack(spacing: 8) {
                 Text("x\(item.quantity)")
@@ -41,6 +48,9 @@ struct ShoppingListView: View {
                 if let date = item.expirationDate {
                   Text(dateLabel(for: date))
                     .foregroundColor(color(for: date))
+                  if DateUtils.isExpiringSoon(date) {
+                    Text("⚠️")
+                  }
                 } else if let period = item.expirationPeriod {
                   Text("期限: \(period)日")
                 }
@@ -89,12 +99,16 @@ struct ShoppingListView: View {
     .navigationViewStyle(.stack)
     .sheet(item: $editingItem) { item in
       ShoppingItemRegisterView(itemToEdit: item) { updatedItem in
-        shoppingViewModel.updateItem(updatedItem)
+        withAnimation {
+          shoppingViewModel.updateItem(updatedItem)
+        }
       }
     }
     .sheet(isPresented: $showingRegister) {
       ShoppingItemRegisterView { newItem in
-        shoppingViewModel.add(newItem)
+        withAnimation {
+          shoppingViewModel.add(newItem)
+        }
       }
     }
     .alert("テンプレート名を入力", isPresented: $showingTemplateNameAlert) {

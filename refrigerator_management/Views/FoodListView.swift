@@ -23,15 +23,24 @@ struct FoodListView: View {
 
         List {
           ForEach(filteredItems) { item in
-            HStack(alignment: .top) {
+            HStack(alignment: .top, spacing: 12) {
+              Text(item.storageType.icon)
+                .font(.title3)
+                .frame(width: 24)
               VStack(alignment: .leading, spacing: 4) {
-                Text(item.name)
-                  .font(.headline)
+                HStack {
+                  Text(item.name)
+                    .font(.headline)
+                  Text(item.category.icon)
+                }
                 HStack(spacing: 8) {
                   Text("x\(item.quantity)")
                   Text(item.category.rawValue)
                   Text(dateLabel(for: item.expirationDate))
                     .foregroundColor(color(for: item.expirationDate))
+                  if DateUtils.isExpiringSoon(item.expirationDate) {
+                    Text("⚠️")
+                  }
                 }
                 .font(.caption)
                 .foregroundColor(.gray)
@@ -40,6 +49,7 @@ struct FoodListView: View {
             }
             .padding(.vertical, 4)
             .contentShape(Rectangle())
+            .background(item.storageType.color.opacity(0.1))
             .cornerRadius(8)
             .onTapGesture {
               editingItem = item
@@ -47,7 +57,9 @@ struct FoodListView: View {
             .swipeActions {
               Button(role: .destructive) {
                 if let index = filteredItems.firstIndex(where: { $0.id == item.id }) {
-                  viewModel.foodItems.removeAll { $0.id == item.id }
+                  withAnimation {
+                    viewModel.foodItems.removeAll { $0.id == item.id }
+                  }
                 }
               } label: {
                 Label("削除", systemImage: "trash")
@@ -68,13 +80,17 @@ struct FoodListView: View {
     .navigationViewStyle(.stack)
     .sheet(isPresented: $showingRegister) {
       FoodRegisterView { newItem in
-        viewModel.add(item: newItem)
+        withAnimation {
+          viewModel.add(item: newItem)
+        }
       }
     }
     .sheet(item: $editingItem) { item in
       FoodRegisterView(itemToEdit: item) { updatedItem in
         if let index = viewModel.foodItems.firstIndex(where: { $0.id == updatedItem.id }) {
-          viewModel.foodItems[index] = updatedItem
+          withAnimation {
+            viewModel.foodItems[index] = updatedItem
+          }
         }
       }
     }

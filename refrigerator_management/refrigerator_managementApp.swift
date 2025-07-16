@@ -29,6 +29,7 @@ struct refrigerator_managementApp: App {
             ContentView()
                 // アプリ全体のロケールを日本語に設定
                 .environment(\.locale, Locale(identifier: "ja_JP"))
+                .tint(.mint)
         }
     }
 }
