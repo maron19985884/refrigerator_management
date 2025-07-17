@@ -43,7 +43,7 @@ struct ContentView: View {
 
 
             // 画面下部に常に表示するバナー広告
-            AdMobBannerView(adUnitID: "ca-app-pub-3940256099942544/2934735716")
+            AdMobBannerView(adUnitID: "ca-app-pub-4060136684986886/3240209100")
                 .frame(width: 320, height: 50)
         }
         // アプリ起動時にインタースティシャル広告を事前読み込み
