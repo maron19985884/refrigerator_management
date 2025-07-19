@@ -8,10 +8,12 @@ class FoodViewModel: ObservableObject {
         didSet { save() } // データ変更時に自動保存
     }
 
-    private let store: FileStore<[FoodItem]>
+    private static let documentsDirectory =
+        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+    private let fileURL: URL
 
     init(fileName: String = "food_items.json") {
-        self.store = FileStore(fileName: fileName)
+        self.fileURL = Self.documentsDirectory.appendingPathComponent(fileName)
         load()
     }
 
@@ -34,17 +36,30 @@ class FoodViewModel: ObservableObject {
 
     // 保存処理（バックグラウンドで実行）
     func save() {
-        store.save(foodItems)
+        let items = foodItems
+        let url = fileURL
+        DispatchQueue.global(qos: .background).async {
+            do {
+                let data = try JSONEncoder().encode(items)
+                try data.write(to: url)
+            } catch {
+                print("[FoodViewModel] 保存エラー: \(error.localizedDescription)")
+            }
+        }
     }
 
     // 読み込み処理
     private func load() {
-        guard FileManager.default.fileExists(atPath: store.url.path) else { return }
-        store.load { [weak self] result in
-            switch result {
-            case let .success(items):
-                self?.foodItems = items
-            case let .failure(error):
+        let url = fileURL
+        guard FileManager.default.fileExists(atPath: url.path) else { return }
+        DispatchQueue.global(qos: .background).async {
+            do {
+                let data = try Data(contentsOf: url)
+                let decoded = try JSONDecoder().decode([FoodItem].self, from: data)
+                DispatchQueue.main.async {
+                    self.foodItems = decoded
+                }
+            } catch {
                 print("[FoodViewModel] 読み込みエラー: \(error.localizedDescription)")
             }
         }
