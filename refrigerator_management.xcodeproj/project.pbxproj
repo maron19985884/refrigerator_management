@@ -32,6 +32,8 @@
 
 /* Begin PBXFileReference section */
 		9E28B4092DDD365B008DCE94 /* refrigerator_management.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = refrigerator_management.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		9E28B4172DDD365D008DCE94 /* refrigerator_managementTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = refrigerator_managementTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		9E28B4212DDD365E008DCE94 /* refrigerator_managementUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = refrigerator_managementUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E94BAE42E1FE56000B17F63 /* Property List 2.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Property List 2.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -39,6 +41,16 @@
 		9E28B40B2DDD365B008DCE94 /* refrigerator_management */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = refrigerator_management;
+			sourceTree = "<group>";
+		};
+		9E28B41A2DDD365D008DCE94 /* refrigerator_managementTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = refrigerator_managementTests;
+			sourceTree = "<group>";
+		};
+		9E28B4242DDD365E008DCE94 /* refrigerator_managementUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = refrigerator_managementUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -52,6 +64,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		9E28B4142DDD365D008DCE94 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9E94BAB12E1FE4AA00B17F63 /* GoogleMobileAds in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9E28B41E2DDD365E008DCE94 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9E94BAB22E1FE4AA00B17F63 /* GoogleMobileAds in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -60,6 +88,8 @@
 			children = (
 				9E94BAE42E1FE56000B17F63 /* Property List 2.plist */,
 				9E28B40B2DDD365B008DCE94 /* refrigerator_management */,
+				9E28B41A2DDD365D008DCE94 /* refrigerator_managementTests */,
+				9E28B4242DDD365E008DCE94 /* refrigerator_managementUITests */,
 				9E28B40A2DDD365B008DCE94 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -68,6 +98,8 @@
 			isa = PBXGroup;
 			children = (
 				9E28B4092DDD365B008DCE94 /* refrigerator_management.app */,
+				9E28B4172DDD365D008DCE94 /* refrigerator_managementTests.xctest */,
+				9E28B4212DDD365E008DCE94 /* refrigerator_managementUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -76,6 +108,7 @@
 
 /* Begin PBXNativeTarget section */
 		9E28B4082DDD365B008DCE94 /* refrigerator_management */ = {
+			isa = PBXNativeTarget;
 			buildConfigurationList = 9E28B42B2DDD365E008DCE94 /* Build configuration list for PBXNativeTarget "refrigerator_management" */;
 			buildPhases = (
 				9E28B4052DDD365B008DCE94 /* Sources */,
@@ -97,6 +130,54 @@
 			productReference = 9E28B4092DDD365B008DCE94 /* refrigerator_management.app */;
 			productType = "com.apple.product-type.application";
 		};
+		9E28B4162DDD365D008DCE94 /* refrigerator_managementTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9E28B42E2DDD365E008DCE94 /* Build configuration list for PBXNativeTarget "refrigerator_managementTests" */;
+			buildPhases = (
+				9E28B4132DDD365D008DCE94 /* Sources */,
+				9E28B4142DDD365D008DCE94 /* Frameworks */,
+				9E28B4152DDD365D008DCE94 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				9E28B4192DDD365D008DCE94 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				9E28B41A2DDD365D008DCE94 /* refrigerator_managementTests */,
+			);
+			name = refrigerator_managementTests;
+			packageProductDependencies = (
+				9E28B4352DDD365E008DCE94 /* GoogleMobileAds */,
+			);
+			productName = refrigerator_managementTests;
+			productReference = 9E28B4172DDD365D008DCE94 /* refrigerator_managementTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		9E28B4202DDD365E008DCE94 /* refrigerator_managementUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9E28B4312DDD365E008DCE94 /* Build configuration list for PBXNativeTarget "refrigerator_managementUITests" */;
+			buildPhases = (
+				9E28B41D2DDD365E008DCE94 /* Sources */,
+				9E28B41E2DDD365E008DCE94 /* Frameworks */,
+				9E28B41F2DDD365E008DCE94 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				9E28B4232DDD365E008DCE94 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				9E28B4242DDD365E008DCE94 /* refrigerator_managementUITests */,
+			);
+			name = refrigerator_managementUITests;
+			packageProductDependencies = (
+				9E28B4352DDD365E008DCE94 /* GoogleMobileAds */,
+			);
+			productName = refrigerator_managementUITests;
+			productReference = 9E28B4212DDD365E008DCE94 /* refrigerator_managementUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -109,6 +190,14 @@
 				TargetAttributes = {
 					9E28B4082DDD365B008DCE94 = {
 						CreatedOnToolsVersion = 16.3;
+					};
+					9E28B4162DDD365D008DCE94 = {
+						CreatedOnToolsVersion = 16.3;
+						TestTargetID = 9E28B4082DDD365B008DCE94;
+					};
+					9E28B4202DDD365E008DCE94 = {
+						CreatedOnToolsVersion = 16.3;
+						TestTargetID = 9E28B4082DDD365B008DCE94;
 					};
 				};
 			};
@@ -130,6 +219,8 @@
 			projectRoot = "";
 			targets = (
 				9E28B4082DDD365B008DCE94 /* refrigerator_management */,
+				9E28B4162DDD365D008DCE94 /* refrigerator_managementTests */,
+				9E28B4202DDD365E008DCE94 /* refrigerator_managementUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -143,6 +234,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		9E28B4152DDD365D008DCE94 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9E28B41F2DDD365E008DCE94 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -153,8 +258,96 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		9E28B4132DDD365D008DCE94 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9E28B41D2DDD365E008DCE94 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		9E28B4192DDD365D008DCE94 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9E28B4082DDD365B008DCE94 /* refrigerator_management */;
+			targetProxy = 9E28B4182DDD365D008DCE94 /* PBXContainerItemProxy */;
+		};
+		9E28B4232DDD365E008DCE94 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9E28B4082DDD365B008DCE94 /* refrigerator_management */;
+			targetProxy = 9E28B4222DDD365E008DCE94 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		9E28B4292DDD365E008DCE94 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = G9BUXBTRYK;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
 			name = Debug;
 		};
 		9E28B42A2DDD365E008DCE94 /* Release */ = {
@@ -398,6 +591,24 @@
 			buildConfigurations = (
 				9E28B42C2DDD365E008DCE94 /* Debug */,
 				9E28B42D2DDD365E008DCE94 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9E28B42E2DDD365E008DCE94 /* Build configuration list for PBXNativeTarget "refrigerator_managementTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9E28B42F2DDD365E008DCE94 /* Debug */,
+				9E28B4302DDD365E008DCE94 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9E28B4312DDD365E008DCE94 /* Build configuration list for PBXNativeTarget "refrigerator_managementUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9E28B4322DDD365E008DCE94 /* Debug */,
+				9E28B4332DDD365E008DCE94 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
