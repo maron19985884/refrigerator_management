@@ -10,7 +10,6 @@
 		9E94BAB02E1FE4AA00B17F63 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = 9E28B4352DDD365E008DCE94 /* GoogleMobileAds */; };
 		9E94BAB12E1FE4AA00B17F63 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = 9E28B4352DDD365E008DCE94 /* GoogleMobileAds */; };
 		9E94BAB22E1FE4AA00B17F63 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = 9E28B4352DDD365E008DCE94 /* GoogleMobileAds */; };
-		9E94BAE52E1FE56000B17F63 /* Property List 2.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9E94BAE42E1FE56000B17F63 /* Property List 2.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,9 +31,6 @@
 
 /* Begin PBXFileReference section */
 		9E28B4092DDD365B008DCE94 /* refrigerator_management.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = refrigerator_management.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		9E28B4172DDD365D008DCE94 /* refrigerator_managementTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = refrigerator_managementTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		9E28B4212DDD365E008DCE94 /* refrigerator_managementUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = refrigerator_managementUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		9E94BAE42E1FE56000B17F63 /* Property List 2.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Property List 2.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -43,14 +39,10 @@
 			path = refrigerator_management;
 			sourceTree = "<group>";
 		};
-		9E28B41A2DDD365D008DCE94 /* refrigerator_managementTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = refrigerator_managementTests;
 			sourceTree = "<group>";
 		};
-		9E28B4242DDD365E008DCE94 /* refrigerator_managementUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = refrigerator_managementUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -86,10 +78,7 @@
 		9E28B4002DDD365B008DCE94 = {
 			isa = PBXGroup;
 			children = (
-				9E94BAE42E1FE56000B17F63 /* Property List 2.plist */,
 				9E28B40B2DDD365B008DCE94 /* refrigerator_management */,
-				9E28B41A2DDD365D008DCE94 /* refrigerator_managementTests */,
-				9E28B4242DDD365E008DCE94 /* refrigerator_managementUITests */,
 				9E28B40A2DDD365B008DCE94 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -98,8 +87,6 @@
 			isa = PBXGroup;
 			children = (
 				9E28B4092DDD365B008DCE94 /* refrigerator_management.app */,
-				9E28B4172DDD365D008DCE94 /* refrigerator_managementTests.xctest */,
-				9E28B4212DDD365E008DCE94 /* refrigerator_managementUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -130,9 +117,7 @@
 			productReference = 9E28B4092DDD365B008DCE94 /* refrigerator_management.app */;
 			productType = "com.apple.product-type.application";
 		};
-		9E28B4162DDD365D008DCE94 /* refrigerator_managementTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 9E28B42E2DDD365E008DCE94 /* Build configuration list for PBXNativeTarget "refrigerator_managementTests" */;
 			buildPhases = (
 				9E28B4132DDD365D008DCE94 /* Sources */,
 				9E28B4142DDD365D008DCE94 /* Frameworks */,
@@ -144,19 +129,13 @@
 				9E28B4192DDD365D008DCE94 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				9E28B41A2DDD365D008DCE94 /* refrigerator_managementTests */,
 			);
-			name = refrigerator_managementTests;
 			packageProductDependencies = (
 				9E28B4352DDD365E008DCE94 /* GoogleMobileAds */,
 			);
-			productName = refrigerator_managementTests;
-			productReference = 9E28B4172DDD365D008DCE94 /* refrigerator_managementTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		9E28B4202DDD365E008DCE94 /* refrigerator_managementUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 9E28B4312DDD365E008DCE94 /* Build configuration list for PBXNativeTarget "refrigerator_managementUITests" */;
 			buildPhases = (
 				9E28B41D2DDD365E008DCE94 /* Sources */,
 				9E28B41E2DDD365E008DCE94 /* Frameworks */,
@@ -168,14 +147,10 @@
 				9E28B4232DDD365E008DCE94 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				9E28B4242DDD365E008DCE94 /* refrigerator_managementUITests */,
 			);
-			name = refrigerator_managementUITests;
 			packageProductDependencies = (
 				9E28B4352DDD365E008DCE94 /* GoogleMobileAds */,
 			);
-			productName = refrigerator_managementUITests;
-			productReference = 9E28B4212DDD365E008DCE94 /* refrigerator_managementUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -219,8 +194,6 @@
 			projectRoot = "";
 			targets = (
 				9E28B4082DDD365B008DCE94 /* refrigerator_management */,
-				9E28B4162DDD365D008DCE94 /* refrigerator_managementTests */,
-				9E28B4202DDD365E008DCE94 /* refrigerator_managementUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -230,7 +203,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9E94BAE52E1FE56000B17F63 /* Property List 2.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -416,7 +388,6 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
                                GENERATE_INFOPLIST_FILE = YES;
-                               INFOPLIST_FILE = "Property List 2.plist";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -456,7 +427,6 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
                                GENERATE_INFOPLIST_FILE = YES;
-                               INFOPLIST_FILE = "Property List 2.plist";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -495,7 +465,6 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MACOSX_DEPLOYMENT_TARGET = 15.4;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.kobayashi.refrigerator-managementTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
@@ -518,7 +487,6 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MACOSX_DEPLOYMENT_TARGET = 15.4;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.kobayashi.refrigerator-managementTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
@@ -540,7 +508,6 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MACOSX_DEPLOYMENT_TARGET = 15.4;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.kobayashi.refrigerator-managementUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
@@ -562,7 +529,6 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MACOSX_DEPLOYMENT_TARGET = 15.4;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.kobayashi.refrigerator-managementUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
@@ -595,7 +561,6 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		9E28B42E2DDD365E008DCE94 /* Build configuration list for PBXNativeTarget "refrigerator_managementTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				9E28B42F2DDD365E008DCE94 /* Debug */,
@@ -604,7 +569,6 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		9E28B4312DDD365E008DCE94 /* Build configuration list for PBXNativeTarget "refrigerator_managementUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				9E28B4322DDD365E008DCE94 /* Debug */,
