@@ -7,6 +7,8 @@
 
 import SwiftUI
 import GoogleMobileAds
+import AppTrackingTransparency
+import AdSupport
 
 /// Google Mobile Ads の初期化を行う AppDelegate
 class AppDelegate: NSObject, UIApplicationDelegate {
@@ -22,6 +24,25 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 struct refrigerator_managementApp: App {
     /// UIApplicationDelegateAdaptor で AppDelegate を使用
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+
+    init() {
+        requestTrackingPermission()
+    }
+
+    /// 初回起動時に App Tracking Transparency ダイアログを表示
+    private func requestTrackingPermission() {
+        guard #available(iOS 14, *) else { return }
+
+        // すでにリクエスト済みか確認
+        if !UserDefaults.standard.bool(forKey: "didRequestATT") {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                ATTrackingManager.requestTrackingAuthorization { status in
+                    print("ATT Status: \(status.rawValue)")
+                    UserDefaults.standard.set(true, forKey: "didRequestATT")
+                }
+            }
+        }
+    }
 
     var body: some Scene {
         WindowGroup {
