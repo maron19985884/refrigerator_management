@@ -11,5 +11,8 @@
 <dict>
     <key>GADApplicationIdentifier</key>
     <string>ca-app-pub-4060136684986886~4713072871</string>
+
+    <key>NSUserTrackingUsageDescription</key>
+    <string>このアプリでは広告配信の最適化のためにデバイスの広告識別子（IDFA）を使用します。</string>
 </dict>
 </plist>
