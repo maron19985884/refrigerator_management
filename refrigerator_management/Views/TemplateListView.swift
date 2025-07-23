@@ -8,6 +8,8 @@ struct TemplateListView: View {
     @State private var showingConfirm = false
     @State private var editingIndex: Int? = nil
     @State private var showingEditSheet = false
+    @State private var deletingIndex: Int? = nil
+    @State private var showingDeleteConfirm = false
 
     var body: some View {
         NavigationView {
@@ -45,6 +47,14 @@ struct TemplateListView: View {
                         templateToApply = template
                         showingConfirm = true
                     }
+                    .swipeActions {
+                        Button(role: .destructive) {
+                            deletingIndex = index
+                            showingDeleteConfirm = true
+                        } label: {
+                            Image(systemName: "trash")
+                        }
+                    }
                 }
             }
             .listStyle(.insetGrouped)
@@ -70,6 +80,17 @@ struct TemplateListView: View {
             if let index = editingIndex {
                 NavigationView {
                     TemplateEditView(template: $templateViewModel.templates[index])
+                }
+            }
+        }
+        .alert("このテンプレートを削除してもよいですか？", isPresented: $showingDeleteConfirm) {
+            Button("キャンセル", role: .cancel) {}
+            Button("削除", role: .destructive) {
+                if let index = deletingIndex {
+                    withAnimation {
+                        templateViewModel.deleteTemplate(at: index)
+                    }
+                    deletingIndex = nil
                 }
             }
         }
