@@ -7,7 +7,6 @@ struct TemplateListView: View {
     @State private var templateToApply: Template? = nil
     @State private var showingConfirm = false
     @State private var editingIndex: Int? = nil
-    @State private var showingEditSheet = false
     @State private var deletingIndex: Int? = nil
     @State private var showingDeleteConfirm = false
 
@@ -35,7 +34,6 @@ struct TemplateListView: View {
                         Spacer()
                         Button(action: {
                             editingIndex = index
-                            showingEditSheet = true
                         }) {
                             Image(systemName: "pencil")
                         }
@@ -76,11 +74,9 @@ struct TemplateListView: View {
         } message: { _ in
             Text("")
         }
-        .sheet(isPresented: $showingEditSheet) {
-            if let binding = bindingToEditingTemplate() {
-                NavigationView {
-                    TemplateEditView(template: binding)
-                }
+        .sheet(item: $editingIndex) { index in
+            NavigationView {
+                TemplateEditView(template: $templateViewModel.templates[index])
             }
         }
         .alert("このテンプレートを削除してもよいですか？", isPresented: $showingDeleteConfirm) {
@@ -119,11 +115,6 @@ struct TemplateListView: View {
         shoppingViewModel.save()
     }
 
-    private func bindingToEditingTemplate() -> Binding<Template>? {
-        guard let index = editingIndex else { return nil }
-        return $templateViewModel.templates[index]
-    }
-
     private var bottomBar: some View {
         HStack {
             Spacer()
@@ -133,9 +124,6 @@ struct TemplateListView: View {
                     templateViewModel.templates.append(new)
                     editingIndex = templateViewModel.templates.count - 1
                 }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    showingEditSheet = true
-                }
             }) {
                 Label("追加", systemImage: "plus")
             }
@@ -144,4 +132,8 @@ struct TemplateListView: View {
         .padding()
         .background(.bar)
     }
+}
+
+extension Int: Identifiable {
+    public var id: Int { self }
 }
