@@ -3,8 +3,6 @@ import SwiftUI
 struct TemplateEditView: View {
     @Binding var template: Template
     @Environment(\.presentationMode) var presentationMode
-    @State private var deleteItemID: UUID? = nil
-    @State private var showingDeleteConfirm = false
 
     var body: some View {
         Form {
@@ -38,8 +36,11 @@ struct TemplateEditView: View {
                         HStack {
                             Spacer()
                             Button(role: .destructive) {
-                                deleteItemID = item.id
-                                showingDeleteConfirm = true
+                                withAnimation {
+                                    if let index = template.items.firstIndex(where: { $0.id == item.id }) {
+                                        template.items.remove(at: index)
+                                    }
+                                }
                             } label: {
                                 Image(systemName: "trash")
                                     .foregroundColor(.red)
@@ -61,15 +62,6 @@ struct TemplateEditView: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button("完了") { presentationMode.wrappedValue.dismiss() }
-            }
-        }
-        .alert("この食材を削除しますか？", isPresented: $showingDeleteConfirm) {
-            Button("キャンセル", role: .cancel) {}
-            Button("削除", role: .destructive) {
-                if let id = deleteItemID, let index = template.items.firstIndex(where: { $0.id == id }) {
-                    template.items.remove(at: index)
-                    deleteItemID = nil
-                }
             }
         }
     }
