@@ -59,11 +59,13 @@ struct TemplateEditView: View {
             }
         }
         .navigationTitle("テンプレート編集")
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button("完了") { presentationMode.wrappedValue.dismiss() }
+        .toolbar(content: {
+            ToolbarItemGroup(placement: .navigationBarTrailing) {
+                Button("完了") {
+                    presentationMode.wrappedValue.dismiss()
+                }
             }
-        }
+        })
     }
 }
 
