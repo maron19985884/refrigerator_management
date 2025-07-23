@@ -77,9 +77,9 @@ struct TemplateListView: View {
             Text("")
         }
         .sheet(isPresented: $showingEditSheet) {
-            if let index = editingIndex {
+            if let binding = bindingToEditingTemplate() {
                 NavigationView {
-                    TemplateEditView(template: $templateViewModel.templates[index])
+                    TemplateEditView(template: binding)
                 }
             }
         }
@@ -119,6 +119,11 @@ struct TemplateListView: View {
         shoppingViewModel.save()
     }
 
+    private func bindingToEditingTemplate() -> Binding<Template>? {
+        guard let index = editingIndex else { return nil }
+        return $templateViewModel.templates[index]
+    }
+
     private var bottomBar: some View {
         HStack {
             Spacer()
@@ -126,9 +131,11 @@ struct TemplateListView: View {
                 let new = Template(name: "新規テンプレート", items: [])
                 withAnimation {
                     templateViewModel.templates.append(new)
+                    editingIndex = templateViewModel.templates.count - 1
                 }
-                editingIndex = templateViewModel.templates.count - 1
-                showingEditSheet = true
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    showingEditSheet = true
+                }
             }) {
                 Label("追加", systemImage: "plus")
             }
