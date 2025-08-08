@@ -1,5 +1,6 @@
 import SwiftUI
 
+
 struct TemplateEditView: View {
     @Binding var template: Template
     @Environment(\.presentationMode) var presentationMode
@@ -12,7 +13,7 @@ struct TemplateEditView: View {
 
             Section(header: Text("食材一覧")) {
                 ForEach($template.items) { $item in
-                    VStack(alignment: .leading, spacing: 4) {
+                    VStack(alignment: .leading, spacing: DesignTokens.Spacing.s / 2) {
                         TextField("食材名", text: $item.name)
 
                         Stepper(value: $item.quantity, in: 1...99) {
@@ -38,7 +39,7 @@ struct TemplateEditView: View {
                             }
                         }
                     }
-                    .padding(.vertical, 4)
+                    .padding(.vertical, DesignTokens.Spacing.s / 2)
                 }
                 .onDelete { indices in
                     withAnimation {
@@ -58,6 +59,8 @@ struct TemplateEditView: View {
                 }
             }
         }
+        .font(DesignTokens.Typography.body)
+        .background(DesignTokens.Colors.backgroundDark)
         .navigationTitle("テンプレート編集")
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {

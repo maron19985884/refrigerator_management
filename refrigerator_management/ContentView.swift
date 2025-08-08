@@ -1,5 +1,6 @@
 import SwiftUI
 
+
 /// アプリのメイン画面を構成する View
 struct ContentView: View {
     /// 在庫を管理する ViewModel
@@ -38,7 +39,7 @@ struct ContentView: View {
                     Label("テンプレート", systemImage: "list.bullet.rectangle")
                 }
             }
-            .padding(.bottom, 50)
+            .padding(.bottom, DesignTokens.Spacing.xl * 2)
 
 
 
@@ -46,6 +47,8 @@ struct ContentView: View {
             AdMobBannerView(adUnitID: "ca-app-pub-4060136684986886/3240209100")
                 .frame(width: 320, height: 50)
         }
+        .font(DesignTokens.Typography.body)
+        .background(DesignTokens.Colors.backgroundDark)
         // アプリ起動時にインタースティシャル広告を事前読み込み
         .onAppear {
             AdManager.shared.loadInterstitial()
