@@ -1,6 +1,5 @@
 import SwiftUI
 
-
 struct ShoppingListView: View {
   @ObservedObject var shoppingViewModel: ShoppingViewModel
   @ObservedObject var foodViewModel: FoodViewModel
@@ -19,7 +18,7 @@ struct ShoppingListView: View {
           shoppingViewModel.shoppingItems.sorted { $0.addedAt < $1.addedAt },
           id: \.id
         ) { item in
-          HStack(alignment: .top, spacing: DesignTokens.Spacing.m) {
+          HStack(alignment: .top, spacing: 12) {
             Button(action: {
               withAnimation {
                 shoppingViewModel.toggleCheck(for: item)
@@ -28,22 +27,22 @@ struct ShoppingListView: View {
               Image(systemName: item.isChecked ? "checkmark.circle.fill" : "circle")
                 .resizable()
                 .frame(width: 28, height: 28)
-                .foregroundColor(item.isChecked ? DesignTokens.Colors.neonGreen : DesignTokens.Colors.onMuted)
+                .foregroundColor(item.isChecked ? .green : .gray)
             }
             .buttonStyle(.borderless)
 
             Text(item.storageType.icon)
-              .font(DesignTokens.Typography.title)
+              .font(.title3)
 
-            VStack(alignment: .leading, spacing: DesignTokens.Spacing.s / 2) {
+            VStack(alignment: .leading, spacing: 4) {
               HStack {
                 Text(item.name)
-                  .font(DesignTokens.Typography.body).bold()
+                  .font(.headline)
                   .strikethrough(item.isChecked)
                 Text(item.category.icon)
               }
 
-              HStack(spacing: DesignTokens.Spacing.s) {
+              HStack(spacing: 8) {
                 Text("x\(item.quantity)")
                 Text(item.category.rawValue)
                 if let date = item.expirationDate {
@@ -56,13 +55,13 @@ struct ShoppingListView: View {
                   Text("期限: \(period)日")
                 }
               }
-              .font(DesignTokens.Typography.body)
-              .foregroundColor(DesignTokens.Colors.onMuted)
+              .font(.caption)
+              .foregroundColor(.gray)
 
               if let note = item.note, !note.isEmpty {
                 Text(note)
-                  .font(DesignTokens.Typography.body)
-                  .foregroundColor(DesignTokens.Colors.onMuted)
+                  .font(.caption)
+                  .foregroundColor(.gray)
               }
             }
             .onTapGesture {
@@ -71,9 +70,9 @@ struct ShoppingListView: View {
             Spacer()
           }
           .contentShape(Rectangle())
-          .padding(.vertical, DesignTokens.Spacing.s)
-          .background(item.isChecked ? DesignTokens.Colors.neonGreen.opacity(0.15) : Color.clear)
-          .cornerRadius(DesignTokens.Radius.m)
+          .padding(.vertical, 8)
+          .background(item.isChecked ? Color.green.opacity(0.15) : Color.clear)
+          .cornerRadius(8)
           .swipeActions {
             Button(role: .destructive) {
               if let index = shoppingViewModel.shoppingItems.firstIndex(where: {
@@ -89,8 +88,6 @@ struct ShoppingListView: View {
         }
       }
       .listStyle(.insetGrouped)
-      .scrollContentBackground(.hidden)
-      .background(DesignTokens.Colors.backgroundDark)
       .safeAreaInset(edge: .bottom) {
         Spacer().frame(height: 94)
       }
@@ -99,7 +96,6 @@ struct ShoppingListView: View {
         bottomBar
       }
     }
-    .background(DesignTokens.Colors.backgroundDark)
     .navigationViewStyle(.stack)
     .sheet(item: $editingItem) { item in
       ShoppingItemRegisterView(itemToEdit: item) { updatedItem in
@@ -187,7 +183,7 @@ struct ShoppingListView: View {
   }
 
   private var bottomBar: some View {
-    HStack(spacing: DesignTokens.Spacing.xl) {
+    HStack(spacing: 24) {
       Button(action: {
         showingRegister = true
       }) {
@@ -207,9 +203,8 @@ struct ShoppingListView: View {
         Label("在庫へ追加", systemImage: "cart.fill.badge.plus")
       }
     }
-    .font(DesignTokens.Typography.body)
-    .padding(DesignTokens.Spacing.l)
+    .padding()
     .frame(maxWidth: .infinity)
-    .background(DesignTokens.Colors.surface)
+    .background(.bar)
   }
 }

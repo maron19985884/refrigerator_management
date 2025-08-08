@@ -1,6 +1,4 @@
 import SwiftUI
-// Design Tokens
-
 
 struct FoodListView: View {
   @State private var selectedStorage: StorageType = .fridge
@@ -21,21 +19,21 @@ struct FoodListView: View {
           }
         }
         .pickerStyle(.segmented)
-        .padding(.horizontal, DesignTokens.Spacing.l)
+        .padding(.horizontal)
 
         List {
           ForEach(filteredItems) { item in
-            HStack(alignment: .top, spacing: DesignTokens.Spacing.m) {
+            HStack(alignment: .top, spacing: 12) {
               Text(item.storageType.icon)
-                .font(DesignTokens.Typography.title)
+                .font(.title3)
                 .frame(width: 24)
-              VStack(alignment: .leading, spacing: DesignTokens.Spacing.s / 2) {
+              VStack(alignment: .leading, spacing: 4) {
                 HStack {
                   Text(item.name)
-                    .font(DesignTokens.Typography.body).bold()
+                    .font(.headline)
                   Text(item.category.icon)
                 }
-                HStack(spacing: DesignTokens.Spacing.s) {
+                HStack(spacing: 8) {
                   Text("x\(item.quantity)")
                   Text(item.category.rawValue)
                   Text(dateLabel(for: item.expirationDate))
@@ -44,15 +42,15 @@ struct FoodListView: View {
                     Text("⚠️")
                   }
                 }
-                .font(DesignTokens.Typography.body)
-                .foregroundColor(DesignTokens.Colors.onMuted)
+                .font(.caption)
+                .foregroundColor(.gray)
               }
               Spacer()
             }
-            .padding(.vertical, DesignTokens.Spacing.s / 2)
+            .padding(.vertical, 4)
             .contentShape(Rectangle())
             .background(item.storageType.color.opacity(0.1))
-            .cornerRadius(DesignTokens.Radius.m)
+            .cornerRadius(8)
             .onTapGesture {
               editingItem = item
             }
@@ -70,8 +68,6 @@ struct FoodListView: View {
           }
         }
         .listStyle(.insetGrouped)
-        .scrollContentBackground(.hidden)
-        .background(DesignTokens.Colors.backgroundDark)
         .safeAreaInset(edge: .bottom) {
           Spacer().frame(height: 94)
         }
@@ -81,7 +77,6 @@ struct FoodListView: View {
         bottomBar
       }
     }
-    .background(DesignTokens.Colors.backgroundDark)
     .navigationViewStyle(.stack)
     .sheet(isPresented: $showingRegister) {
       FoodRegisterView { newItem in
@@ -121,8 +116,7 @@ struct FoodListView: View {
       }
       Spacer()
     }
-    .font(DesignTokens.Typography.body)
-    .padding(DesignTokens.Spacing.l)
-    .background(DesignTokens.Colors.surface)
+    .padding()
+    .background(.bar)
   }
 }

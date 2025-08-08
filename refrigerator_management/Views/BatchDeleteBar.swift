@@ -1,6 +1,5 @@
 import SwiftUI
 
-
 struct BatchDeleteBar: View {
     var selectionIsEmpty: Bool
     var deleteAction: () -> Void
@@ -13,10 +12,9 @@ struct BatchDeleteBar: View {
             .disabled(selectionIsEmpty)
             Spacer()
         }
-        .font(DesignTokens.Typography.body)
-        .padding(DesignTokens.Spacing.l)
+        .padding()
         .frame(maxWidth: .infinity)
-        .background(DesignTokens.Colors.surface)
+        .background(.bar)
     }
 }
 
