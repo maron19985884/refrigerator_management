@@ -1,6 +1,5 @@
 import SwiftUI
 
-
 struct ShoppingItemRegisterView: View {
     @Environment(\.presentationMode) var presentationMode
     @State private var name: String = ""
@@ -76,7 +75,6 @@ struct ShoppingItemRegisterView: View {
                     .disabled(name.trimmingCharacters(in: .whitespaces).isEmpty)
                 }
             }
-            .font(DesignTokens.Typography.body)
             .navigationTitle(itemToEdit == nil ? "食材を追加" : "食材を編集")
             .onAppear {
                 if let item = itemToEdit {
@@ -88,6 +86,5 @@ struct ShoppingItemRegisterView: View {
                 }
             }
         }
-        .background(DesignTokens.Colors.backgroundDark)
     }
 }

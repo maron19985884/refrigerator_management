@@ -2,7 +2,6 @@
 
 import SwiftUI
 
-
 struct FoodRegisterView: View {
     @Environment(\.presentationMode) var presentationMode
     @State private var name: String = ""
@@ -53,7 +52,7 @@ struct FoodRegisterView: View {
                             Button("閉じる") {
                                 showingDatePicker = false
                             }
-                            .padding(DesignTokens.Spacing.m)
+                            .padding()
                         }
                     }
                 }
@@ -98,7 +97,6 @@ struct FoodRegisterView: View {
                     .disabled(name.trimmingCharacters(in: .whitespaces).isEmpty)
                 }
             }
-            .font(DesignTokens.Typography.body)
             .navigationTitle(itemToEdit == nil ? "食材を追加" : "食材を編集")
             .onAppear {
                 // 編集時のみ初期値をセット
@@ -111,6 +109,5 @@ struct FoodRegisterView: View {
                 }
             }
         }
-        .background(DesignTokens.Colors.backgroundDark)
     }
 }
