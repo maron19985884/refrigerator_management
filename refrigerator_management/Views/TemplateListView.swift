@@ -1,5 +1,6 @@
 import SwiftUI
 
+
 struct TemplateListView: View {
     @ObservedObject var templateViewModel: TemplateViewModel
     @ObservedObject var shoppingViewModel: ShoppingViewModel
@@ -16,19 +17,18 @@ struct TemplateListView: View {
                 ForEach(templateViewModel.templates.indices, id: \.self) { index in
                     let template = templateViewModel.templates[index]
                     HStack(alignment: .top) {
-                        VStack(alignment: .leading, spacing: 4) {
+                        VStack(alignment: .leading, spacing: DesignTokens.Spacing.s / 2) {
                             Text(template.name)
-                                .font(.title3)
-                                .bold()
+                                .font(DesignTokens.Typography.title)
                                 .underline()
                             ForEach(template.items) { item in
-                                HStack(spacing: 4) {
+                                HStack(spacing: DesignTokens.Spacing.s / 2) {
                                     Text(item.storageType.icon)
                                     Text(item.category.icon)
                                     Text("\(item.name) × \(item.quantity)")
                                 }
-                                .font(.caption)
-                                .foregroundColor(.gray)
+                                .font(DesignTokens.Typography.body)
+                                .foregroundColor(DesignTokens.Colors.onMuted)
                             }
                         }
                         Spacer()
@@ -39,7 +39,7 @@ struct TemplateListView: View {
                         }
                         .buttonStyle(BorderlessButtonStyle())
                     }
-                    .padding(.vertical, 4)
+                    .padding(.vertical, DesignTokens.Spacing.s / 2)
                     .contentShape(Rectangle())
                     .onTapGesture {
                         templateToApply = template
@@ -56,6 +56,8 @@ struct TemplateListView: View {
                 }
             }
             .listStyle(.insetGrouped)
+            .scrollContentBackground(.hidden)
+            .background(DesignTokens.Colors.backgroundDark)
             .safeAreaInset(edge: .bottom) {
                 Spacer().frame(height: 94)
             }
@@ -64,6 +66,7 @@ struct TemplateListView: View {
                 bottomBar
             }
         }
+        .background(DesignTokens.Colors.backgroundDark)
         .navigationViewStyle(.stack)
         .alert("このテンプレートを買い物リストに反映しますか？", isPresented: $showingConfirm, presenting: templateToApply) { template in
             Button("キャンセル", role: .cancel) {}
@@ -129,8 +132,9 @@ struct TemplateListView: View {
             }
             Spacer()
         }
-        .padding()
-        .background(.bar)
+        .font(DesignTokens.Typography.body)
+        .padding(DesignTokens.Spacing.l)
+        .background(DesignTokens.Colors.surface)
     }
 }
 
